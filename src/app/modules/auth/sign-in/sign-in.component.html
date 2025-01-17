@@ -1,1 +1,48 @@
-<p>sign-in works!</p>
+<div class="login-container">
+  <div class="login-box">
+    <div class="logo-container">
+      <img
+        src="../../../../assets/images/Logo.png"
+        alt="Company logo with text 'PM EXPRESS 2021 CA'"
+      />
+    </div>
+    <form [formGroup]="loginForm">
+        <mat-label>Usuario (cedula)</mat-label>
+        <div class="input-container">
+          <mat-icon class="input-icon">person</mat-icon>
+          <mat-form-field appearance="outline" class="full-width mat-form-field-appearance-outline">
+            <input matInput type="number" formControlName="username" />
+            <mat-error *ngIf="username.invalid">{{getErrorMessage()}}</mat-error>
+          </mat-form-field>
+        </div>
+        <mat-label>Contraseña</mat-label>
+        <div class="input-container">
+          <mat-icon class="input-icon">lock</mat-icon>
+          <mat-form-field appearance="outline" class="full-width mat-form-field-appearance-outline">
+            <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" />
+            <mat-error *ngIf="username.invalid">{{getErrorMessage()}}</mat-error>
+            <button
+          mat-icon-button
+          matSuffix
+          (click)="hide = !hide"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide"
+        >
+          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+          </mat-form-field>
+        </div>
+      <div class="forgot-password">
+        <a href="#">¿Olvido de Contraseña?</a>
+      </div>
+      <div class="login-button">
+        <button mat-raised-button (click)="onSubmit()">
+          Ingresar
+        </button>
+      </div>
+    </form>
+    <div class="register-link">
+      <a href="#">¡Registrate Aquí!</a>
+    </div>
+  </div>
+</div>

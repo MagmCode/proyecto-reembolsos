@@ -76,6 +76,8 @@ import { SignUpComponent } from './modules/auth/sign-up/sign-up.component';
     MatAutocompleteModule,
     MatNativeDateModule,
     ReactiveFormsModule,
+    MatDatepickerModule,
+    MatTooltipModule
     
 
     

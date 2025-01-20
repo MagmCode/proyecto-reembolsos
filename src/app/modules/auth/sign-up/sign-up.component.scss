@@ -1,0 +1,90 @@
+.sign-up-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: url("/assets/images/background.png") no-repeat center center;
+  background-size: cover;
+  position: relative;
+}
+
+h2 {
+  color: #1267b1;
+  margin: 0;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.sign-up-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+  background: white;
+  padding: 2rem 3rem;
+  border-radius: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  width: 100%;
+  text-align: center;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  margin-bottom: 80px;
+}
+
+.close-icon {
+  color: #757575;
+  left: 10px;
+  cursor: pointer;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+label {
+  margin-bottom: 3px;
+  color: #757575;
+  text-align: left;
+}
+
+.register-button {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  button {
+    color: white;
+    width: 300px;
+    height: 45px;
+    border-radius: 20px;
+  }
+}
+
+
+
+/* Eliminar las flechas de los campos numéricos */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}

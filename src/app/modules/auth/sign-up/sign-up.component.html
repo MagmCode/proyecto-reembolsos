@@ -1,1 +1,235 @@
-<p>sign-up works!</p>
+<div class="sign-up-container">
+  <div class="sign-up-box">
+    <div class="header">
+    <mat-icon class="close-icon" (click)="onClose()" matTooltip="Cerrar">close</mat-icon>
+    <h2>Formulario de Registro</h2>
+</div>
+    <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="nombre">Nombre</label>
+          <mat-form-field appearance="outline">
+            <input matInput id="nombre" formControlName="nombre" required />
+            <mat-error *ngIf="signUpForm.invalid"
+              >Por favor ingrese su nombre</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <label for="apellido">Apellido</label>
+          <mat-form-field appearance="outline">
+            <input matInput id="apellido" formControlName="apellido" required />
+            <mat-error *ngIf="signUpForm.invalid"
+              >Por favor ingrese su apellido</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <label for="tipoCedula">Tipo</label>
+          <mat-form-field appearance="outline">
+            <mat-select id="tipoCedula" formControlName="tipoCedula" required>
+              <mat-option value="V">V</mat-option>
+              <mat-option value="E">E</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <label for="cedula">Cédula</label>
+          <mat-form-field appearance="outline">
+            <input matInput type="number" formControlName="cedula" required />
+            <mat-error *ngIf="signUpForm.invalid"
+              >Por favor ingrese su cédula</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <label for="fechaNacimiento">Fecha de Nacimiento</label>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [matDatepicker]="picker"
+              formControlName="fechaNacimiento"
+              required 
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="signUpForm.invalid"
+              >Por favor ingrese su fecha de nacimiento</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <label for="telefono">Teléfono</label>
+          <mat-form-field appearance="outline">
+            <input matInput type="number" formControlName="telefono" required />
+            <mat-error *ngIf="signUpForm.invalid"
+              >Por favor ingrese su teléfono</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <label for="telefonoOpcional">Teléfono (Opcional)</label>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              type="number"
+              formControlName="telefonoOpcional"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <label for="correo">Correo Electrónico</label>
+          <mat-form-field appearance="outline">
+            <input matInput type="email" formControlName="correo" required />
+            <mat-error *ngIf="signUpForm.invalid"
+              >Por favor ingrese un correo válido</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <label for="clave">Clave</label>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [type]="hide ? 'password' : 'text'"
+              id="clave"
+              formControlName="clave"
+              required
+            />
+            <button
+              mat-icon-button
+              matSuffix
+              (click)="hide = !hide"
+              [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide"
+            >
+              <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+            </button>
+            <mat-error *ngIf="signUpForm.invalid"
+              >Por favor ingrese una clave</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <label for="confirmarClave">Confirme la Clave</label>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [type]="hide ? 'password' : 'text'"
+              id="confirmarClave"
+              formControlName="confirmarClave"
+              required
+            />
+            <button
+              mat-icon-button
+              matSuffix
+              (click)="hide = !hide"
+              [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide"
+            >
+              <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+            </button>
+            <mat-error *ngIf="signUpForm.invalid"
+              >Por favor confirme su clave</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <label for="aseguradora">Aseguradora</label>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              id="aseguradora"
+              formControlName="aseguradora"
+              required
+            />
+            <mat-error *ngIf="signUpForm.invalid"
+              >Por favor ingrese su aseguradora</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <label for="nroPoliza">Nro. de Póliza</label>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              type="number"
+              formControlName="nroPoliza"
+              required
+            />
+            <mat-error *ngIf="signUpForm.invalid"
+              >Por favor ingrese su número de póliza</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <label for="vigenteDesde">Vigencia Desde</label>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [matDatepicker]="pickerDesde"
+              id="vigenteDesde"
+              formControlName="vigenteDesde"
+              required
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="pickerDesde"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #pickerDesde></mat-datepicker>
+            <mat-error *ngIf="signUpForm.invalid"
+              >Por favor ingrese la fecha de inicio de vigencia</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="form-field">
+          <label for="vigenteHasta">Vigencia Hasta</label>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [matDatepicker]="pickerHasta"
+              id="vigenteHasta"
+              formControlName="vigenteHasta"
+              required
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="pickerHasta"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #pickerHasta></mat-datepicker>
+            <mat-error *ngIf="signUpForm.invalid"
+              >Por favor ingrese la fecha de fin de vigencia</mat-error
+            >
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="register-button">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="signUpForm.invalid"
+        >
+          Registrar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

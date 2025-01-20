@@ -30,6 +30,7 @@ export class SignInComponent implements OnInit {
   onSubmit() {
     if (this.loginForm.valid) {
       console.log(this.loginForm.value);
+      this.router.navigate(['/home']);
     }
   }
 

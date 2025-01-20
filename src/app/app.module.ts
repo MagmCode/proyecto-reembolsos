@@ -39,12 +39,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { SignInComponent } from './modules/auth/sign-in/sign-in.component';
 import { SignUpComponent } from './modules/auth/sign-up/sign-up.component';
+import { HomePageComponent } from './modules/user/home-page/home-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SignInComponent,
-    SignUpComponent
+    SignUpComponent,
+    HomePageComponent
   ],
   imports: [
     BrowserModule,

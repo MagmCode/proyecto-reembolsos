@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-sign-in',
@@ -11,7 +13,10 @@ export class SignInComponent implements OnInit {
   username!: FormControl;
   hide = true;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -33,5 +38,9 @@ export class SignInComponent implements OnInit {
       return 'Por favor rellene los campos';
     }
     return this.username.hasError('username') ? 'Not a valid username' : '';
+  }
+
+  signUp() {
+    this.router.navigate(['/sign-up']);
   }
 }

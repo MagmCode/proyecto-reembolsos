@@ -25,11 +25,6 @@
   text-align: center;
 }
 
-.title {
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-  font-weight: 600;
-}
 
 .logo-container {
   margin-bottom: 1.5rem;
@@ -75,6 +70,7 @@
   a {
     color: #1267b1;
     text-decoration: none;
+    cursor: pointer;
     &:hover {
       text-decoration: underline;
     }
@@ -96,6 +92,7 @@
   a {
     color: #757575;
     text-decoration: none;
+    cursor: pointer;
     &:hover {
       text-decoration: underline;
     }

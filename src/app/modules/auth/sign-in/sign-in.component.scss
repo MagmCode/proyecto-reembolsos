@@ -149,21 +149,21 @@ input[type=number] {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 400px;
     width: 100%;
-    max-height: 550px;
+    max-height: 600px;
     height: 100%;
     text-align: center;
   }
   
   
   .logo-container {
-    margin-bottom: 1.5rem;
+    margin: 2rem 0 -1.5rem 0;
     img {
       max-width: 120px;
     }
   }
   
   .full-width {
-    width: 88%;
+    width: 0%;
     margin-bottom: 1rem;
   }
   
@@ -172,7 +172,7 @@ input[type=number] {
     display: flex;
     align-items: center;
     margin-bottom:0rem; 
-    width: 94%;
+    width: 100%;
   
   }
   
@@ -181,7 +181,7 @@ input[type=number] {
       position: absolute;
       left: 0px;
       bottom: 56px;
-      margin-left: -2px;
+      margin-left: 1px;
       z-index: 1;
       color: #1267b1;
       font-size: 2rem;
@@ -193,7 +193,7 @@ input[type=number] {
   
   .forgot-password {
     text-align: center;
-    margin-bottom: 4rem;
+    margin-bottom: 2.5rem;
     margin-top: 0.50rem;
     font-size: 0.93rem;
     a {
@@ -208,7 +208,7 @@ input[type=number] {
   }
 
   .login-button {
-    margin-bottom: 0rem;
+    margin-bottom:-3rem;
     button{
       background: #0067b1;
       color: white;

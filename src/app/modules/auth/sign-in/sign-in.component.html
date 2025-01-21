@@ -7,19 +7,19 @@
       />
     </div>
     <form [formGroup]="loginForm" class="form-container">
-        <mat-label>Usuario (cédula)</mat-label>
+        <label for="username" >Usuario (cédula)</label>
         <div class="input-container">
           <mat-icon class="input-icon">person</mat-icon>
           <mat-form-field appearance="outline" class="full-width mat-form-field-appearance-outline">
-            <input matInput type="number" formControlName="username" />
+            <input matInput type="number" formControlName="username" id="username"/>
             <mat-error *ngIf="username.invalid">{{getErrorMessage()}}</mat-error>
           </mat-form-field>
         </div>
-        <mat-label>Contraseña</mat-label>
+        <label for="password">Contraseña</label>
         <div class="input-container">
           <mat-icon class="input-icon">lock</mat-icon>
           <mat-form-field appearance="outline" class="full-width mat-form-field-appearance-outline">
-            <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" />
+            <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" id="password" />
             <mat-error *ngIf="username.invalid">{{getErrorMessage()}}</mat-error>
             <button
           mat-icon-button

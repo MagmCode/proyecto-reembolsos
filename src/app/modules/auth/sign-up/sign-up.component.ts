@@ -40,7 +40,7 @@ export class SignUpComponent implements OnInit {
       fechaNacimiento: ['', Validators.required],
       telefono: ['', Validators.required],
       telefonoOpcional: [''],
-      correo: ['', Validators.required, Validators.email],
+      correo: ['', Validators.required],
       clave: ['', Validators.required],
       confirmarClave: ['', Validators.required],
       aseguradora: ['', Validators.required],
@@ -71,6 +71,7 @@ export class SignUpComponent implements OnInit {
     if (this.signUpForm.valid) {
       console.log(this.signUpForm.value);
       this.signUpForm.reset();
+      this.router.navigate(['Login']);
     } else {
       this.signUpForm.markAllAsTouched();
     }
@@ -80,6 +81,6 @@ export class SignUpComponent implements OnInit {
     this.router.navigate(['']);
   }
 
-  
+
 
 }

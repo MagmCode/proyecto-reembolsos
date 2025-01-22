@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home-page',
@@ -7,9 +8,33 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomePageComponent implements OnInit {
 
-  constructor() { }
+  menuOpen = false;
+
+  constructor(
+    private router: Router,
+  ) { }
 
   ngOnInit(): void {
   }
+
+// Rutas
+
+  toggleMenu() {
+     this.menuOpen = !this.menuOpen;
+   }
+ 
+  editProfile() {
+     // this.router.navigate(['/edit-profile']);
+     console.log('Edit Profile');
+   }
+   changePassword() {
+     // this.router.navigate(['/change-password']);
+     console.log('change Password');
+   }
+   logout() {
+     // this.router.navigate(['/sign-in']);
+     console.log('Logout');
+   }
+   
 
 }

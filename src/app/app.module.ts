@@ -34,6 +34,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCardModule } from '@angular/material/card';
 
 
 
@@ -79,7 +80,8 @@ import { HomePageComponent } from './modules/user/home-page/home-page.component'
     MatNativeDateModule,
     ReactiveFormsModule,
     MatDatepickerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatCardModule
     
 
     

@@ -1,1 +1,56 @@
-<p>home-page works!</p>
+<div class="app-container">
+  <div class="header">
+    <div class="logo-container">
+      <img src="../../../../assets/images/Logo.png" alt="Logo" class="logo-header" />
+    </div>
+    <nav class="nav-links">
+      <a href="">Inicio</a>
+      <a href="">Carga Familiar</a>
+      <a href="">Reembolso</a>
+      <a href="">Carta Aval</a>
+    </nav>
+    <div class="user-info" (click)="toggleMenu()">
+      <mat-icon class="user-icon">person</mat-icon>
+      <span class="user-text">Usuario
+      <mat-icon class="arrow-icon">arrow_drop_down</mat-icon>
+    </span>
+      <div class="user-menu" *ngIf="menuOpen">
+        <a (click)="editProfile()">Editar Perfil</a>
+        <a (click)="changePassword()">Cambio de clave</a>
+        <a (click)="logout()">Cerrar sesión</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-content">
+    <div class="content-wrapper">
+      <div class="info-section">
+        <h1 class="welcome-text">¡Bienvenido!</h1>
+        <p class="description">
+          En RM Express, atender a nuestros <br />
+          clientes es nuestra prioridad.
+        </p>
+        <div class="request-section">
+          <h2 class="request-title">Haz tú solicitud</h2>
+          <div class="request-options">
+            <mat-card class="option">
+              <p class="option-text">Reembolso</p>
+              <mat-icon class="option-icon">attach_money</mat-icon>
+            </mat-card>
+            <mat-card class="option">
+              <p class="option-text">Carta Aval</p>
+              <mat-icon class="option-icon">description</mat-icon>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+      <div class="logo-section">
+        <img
+          src="../../../../assets/images/Logo.png"
+          alt="Logo"
+          class="main-logo"
+        />
+      </div>
+    </div>
+  </main>
+</div>

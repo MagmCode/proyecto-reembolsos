@@ -81,7 +81,8 @@ import { HomePageComponent } from './modules/user/home-page/home-page.component'
     ReactiveFormsModule,
     MatDatepickerModule,
     MatTooltipModule,
-    MatCardModule
+    MatCardModule,
+    MatSidenavModule
     
 
     

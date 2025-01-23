@@ -1,56 +1,93 @@
 <div class="app-container">
   <div class="header">
+    <mat-icon class="menu-icon-H" (click)="toggleSidenav()">menu</mat-icon>
     <div class="logo-container">
-      <img src="../../../../assets/images/Logo.png" alt="Logo" class="logo-header" />
+      <img
+        src="../../../../assets/images/Logo.png"
+        alt="Logo"
+        class="logo-header"
+      />
     </div>
     <nav class="nav-links">
-      <a href="">Inicio</a>
-      <a href="">Carga Familiar</a>
-      <a href="">Reembolso</a>
-      <a href="">Carta Aval</a>
+      <a (click)="home()">Inicio</a>
+      <a (click)="cargaFamiliar()">Carga Familiar</a>
+      <a (click)="reembolso()">Reembolso</a>
+      <a (click)="cartaAval()">Carta Aval</a>
     </nav>
-    <div class="user-info" (click)="toggleMenu()">
+    <div class="user-info" (mouseenter)="showMenu()" (mouseleave)="hideMenu()">
       <mat-icon class="user-icon">person</mat-icon>
-      <span class="user-text">Usuario
-      <mat-icon class="arrow-icon">arrow_drop_down</mat-icon>
-    </span>
-      <div class="user-menu" *ngIf="menuOpen">
-        <a (click)="editProfile()">Editar Perfil</a>
-        <a (click)="changePassword()">Cambio de clave</a>
-        <a (click)="logout()">Cerrar sesión</a>
+      <span class="user-text"
+        >Usuario
+        <mat-icon class="arrow-icon">arrow_drop_down</mat-icon>
+      </span>
+      <div
+        class="user-menu"
+        *ngIf="menuOpen"
+        (mouseenter)="showMenu()"
+        (mouseleave)="hideMenu()"
+      >
+        <a (click)="editProfile()"
+          >Editar Perfil
+          <mat-icon class="user-menu-icon">edit</mat-icon>
+        </a>
+        <a (click)="changePassword()"
+          >Cambio de clave
+          <mat-icon class="user-menu-icon">password</mat-icon>
+        </a>
+        <a (click)="logout()"
+          >Cerrar sesión
+          <mat-icon class="user-menu-icon">logout</mat-icon>
+        </a>
       </div>
     </div>
   </div>
 
-  <main class="main-content">
-    <div class="content-wrapper">
-      <div class="info-section">
-        <h1 class="welcome-text">¡Bienvenido!</h1>
-        <p class="description">
-          En RM Express, atender a nuestros <br />
-          clientes es nuestra prioridad.
-        </p>
-        <div class="request-section">
-          <h2 class="request-title">Haz tú solicitud</h2>
-          <div class="request-options">
-            <mat-card class="option">
-              <p class="option-text">Reembolso</p>
-              <mat-icon class="option-icon">attach_money</mat-icon>
-            </mat-card>
-            <mat-card class="option">
-              <p class="option-text">Carta Aval</p>
-              <mat-icon class="option-icon">description</mat-icon>
-            </mat-card>
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav
+      #sidenav
+      mode="over"
+      [opened]="sidenavOpen"
+      (click)="toggleSidenav()"
+    >
+      <nav class="nav-links-side">
+        <a (click)="home()">Inicio</a>
+        <a (click)="cargaFamiliar()">Carga Familiar</a>
+        <a (click)="reembolso()">Reembolso</a>
+        <a (click)="cartaAval()">Carta Aval</a>
+      </nav>
+    </mat-sidenav>
+    <mat-sidenav-content [class.blurred]="sidenavOpen"  (click)="closeSidenav($event)" class="main-sidenav-content">
+      <main class="main-content">
+        <div class="content-wrapper">
+          <div class="info-section">
+            <h1 class="welcome-text">¡Bienvenido!</h1>
+            <p class="description">
+              En RM Express, atender a nuestros <br />
+              clientes es nuestra prioridad.
+            </p>
+            <div class="request-section">
+              <h2 class="request-title">Haz tu solicitud</h2>
+              <div class="request-options">
+                <mat-card class="option">
+                  <p class="option-text">Reembolso</p>
+                  <mat-icon class="option-icon">attach_money</mat-icon>
+                </mat-card>
+                <mat-card class="option">
+                  <p class="option-text">Carta Aval</p>
+                  <mat-icon class="option-icon">description</mat-icon>
+                </mat-card>
+              </div>
+            </div>
+          </div>
+          <div class="logo-section">
+            <img
+              src="../../../../assets/images/Logo.png"
+              alt="Logo"
+              class="main-logo"
+            />
           </div>
         </div>
-      </div>
-      <div class="logo-section">
-        <img
-          src="../../../../assets/images/Logo.png"
-          alt="Logo"
-          class="main-logo"
-        />
-      </div>
-    </div>
-  </main>
+      </main>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>

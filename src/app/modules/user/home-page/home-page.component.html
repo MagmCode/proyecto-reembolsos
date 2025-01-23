@@ -47,7 +47,7 @@
       #sidenav
       mode="over"
       [opened]="sidenavOpen"
-      (click)="toggleSidenav()"
+      (openedChange)="onSidenavChange($event)"
     >
       <nav class="nav-links-side">
         <a (click)="home()">Inicio</a>

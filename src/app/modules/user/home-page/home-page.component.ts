@@ -80,7 +80,11 @@ export class HomePageComponent implements OnInit {
 
   // Nav Menu
   home() {
-    this.router.navigate(['/home']);
+    if (this.sidenavOpen) {
+      this.sidenavOpen = false;
+    }
+    // this.router.navigate(['/home']);
+    
     // console.log('Home');
   }
 

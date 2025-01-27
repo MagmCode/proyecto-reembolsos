@@ -8,7 +8,7 @@ html {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 100vh;
+  max-height: 100vh;
   height: 100%;
 }
 
@@ -16,7 +16,7 @@ html {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2.5rem 1rem 2rem;
+  padding: 16px 40px 16px 32px;
   background: linear-gradient(
     90deg,
     rgba(164, 222, 244, 1) 0%,
@@ -25,7 +25,7 @@ html {
     rgba(29, 112, 185, 1) 85%
   );
   color: white;
-  height: 4rem;
+  // height: 6%;
 
   .menu-icon-H {
     display: none;
@@ -60,10 +60,8 @@ html {
   }
 
   .user-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
+    display: grid;
+    grid-gap: 3vh;
     position: relative;
 
     .user-icon {
@@ -147,7 +145,7 @@ html {
     justify-content: space-between;
     align-items: center;
     text-align: center;
-    height: 75vh;
+    height: 66vh;
 
     .welcome-text {
       font-size: 3.5rem;
@@ -233,8 +231,8 @@ html {
     align-items: center;
 
     .main-logo {
-      height: 30rem;
-      width: 37rem;
+      // height: 30rem;
+      width: 70%;
     }
   }
 }

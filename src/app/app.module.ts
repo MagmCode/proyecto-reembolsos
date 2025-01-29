@@ -41,13 +41,19 @@ import { MatCardModule } from '@angular/material/card';
 import { SignInComponent } from './modules/auth/sign-in/sign-in.component';
 import { SignUpComponent } from './modules/auth/sign-up/sign-up.component';
 import { HomePageComponent } from './modules/user/home-page/home-page.component';
+import { SidebarComponent } from './modules/pages/sidebar/sidebar.component';
+import { FooterComponent } from './modules/pages/footer/footer.component';
+import { HeaderComponent } from './modules/pages/header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SignInComponent,
     SignUpComponent,
-    HomePageComponent
+    HomePageComponent,
+    SidebarComponent,
+    FooterComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

@@ -35,6 +35,15 @@ export class HomePageComponent implements OnInit {
     // // console.log('Sidenav', this.sidenavOpen);
   }
 
+  onSidenavToggle(opened: boolean) {
+    this.sidenavOpen = opened;
+    if (this.sidenavOpen) {
+      this.addBlur();
+    } else {
+      this.removeBlur();
+    }
+  }
+
   closeSidenav(event: Event) {
     if (this.sidenavOpen && !(event.target as HTMLElement).closest('mat-sidenav')) {
       this.sidenavOpen = false;
@@ -50,14 +59,14 @@ export class HomePageComponent implements OnInit {
   }
 
   addBlur() {
-    const content = document.querySelector('mat-sidenav-content');
+    const content = document.querySelector('main-content');
     if (content) {
       this.renderer.addClass(content, 'blurred');
     }
   }
 
   removeBlur() {
-    const content = document.querySelector('mat-sidenav-content');
+    const content = document.querySelector('main-content');
     if (content) {
       this.renderer.removeClass(content, 'blurred');
     }

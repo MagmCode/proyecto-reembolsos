@@ -1,1 +1,59 @@
-<p>header works!</p>
+<div class="header">
+    <mat-icon class="menu-icon-H" (click)="toggleSidenav()">menu</mat-icon>
+    <div class="logo-container">
+      <img
+        src="../../../../assets/images/Logo.png"
+        alt="Logo"
+        class="logo-header"
+      />
+    </div>
+    <nav class="nav-links">
+      <a (click)="home()">Inicio</a>
+      <a (click)="cargaFamiliar()">Carga Familiar</a>
+      <a (click)="reembolso()">Reembolso</a>
+      <a (click)="cartaAval()">Carta Aval</a>
+    </nav>
+    <div class="user-info" (mouseenter)="showMenu()" (mouseleave)="hideMenu()">
+      <mat-icon class="user-icon">person</mat-icon>
+      <span class="user-text"
+        >Usuario
+        <mat-icon class="arrow-icon">arrow_drop_down</mat-icon>
+      </span>
+      <div
+        class="user-menu"
+        *ngIf="menuOpen"
+        (mouseenter)="showMenu()"
+        (mouseleave)="hideMenu()"
+      >
+        <a (click)="editProfile()"
+          >Editar Perfil
+          <mat-icon class="user-menu-icon">edit</mat-icon>
+        </a>
+        <a (click)="changePassword()"
+          >Cambio de clave
+          <mat-icon class="user-menu-icon">password</mat-icon>
+        </a>
+        <a (click)="logout()"
+          >Cerrar sesión
+          <mat-icon class="user-menu-icon">logout</mat-icon>
+        </a>
+      </div>
+    </div>
+  </div>
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav
+    #sidenav
+    mode="over"
+    [opened]="sidenavOpen"
+    (openedChange)="onSidenavChange($event)"
+    >
+    <nav class="nav-links-side">
+      <a (click)="home()">Inicio</a>
+      <a (click)="cargaFamiliar()">Carga Familiar</a>
+      <a (click)="reembolso()">Reembolso</a>
+      <a (click)="cartaAval()">Carta Aval</a>
+    </nav>
+    </mat-sidenav>
+    <mat-sidenav-content   (click)="closeSidenav($event)" class="main-sidenav-content">
+        </mat-sidenav-content>
+    </mat-sidenav-container>

@@ -50,10 +50,39 @@ h2 {
   gap: 20px;
 }
 
+.form-field-group {
+  display: flex;
+  align-items: flex-end;
+
+  .form-field {
+    margin-right: rem;
+  }
+
+  .tipo-cedula {
+    width: 60px;
+  }
+
+  .cedula {
+    flex: 1;
+  }
+}
+
 .form-field {
   display: flex;
   flex-direction: column;
   width: 100%;
+}
+
+.radio-group {
+display: flex;
+
+  .options{
+    margin-top: 1.1rem;
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+  }
+  
 }
 
 .mat-icon-button {
@@ -136,6 +165,10 @@ input[type=number] {
   
     .form-field {
       width: 100%;
+    }
+
+    .radio-group {
+      margin-bottom: 2rem;
     }
   
     .register-button {

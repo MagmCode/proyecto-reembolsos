@@ -1,9 +1,11 @@
 <div class="sign-up-container">
   <div class="sign-up-box">
     <div class="header">
-    <mat-icon class="close-icon" (click)="onClose()" matTooltip="Cerrar">close</mat-icon>
-    <h2>Formulario de Registro</h2>
-</div>
+      <mat-icon class="close-icon" (click)="onClose()" matTooltip="Cerrar"
+        >close</mat-icon
+      >
+      <h2>Formulario de Registro</h2>
+    </div>
     <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
       <div class="form-grid">
         <div class="form-field">
@@ -26,24 +28,32 @@
           </mat-form-field>
         </div>
 
-        <div class="form-field">
-          <label for="tipoCedula">Tipo</label>
-          <mat-form-field appearance="outline">
-            <mat-select id="tipoCedula" formControlName="tipoCedula" required>
-              <mat-option value="V">V</mat-option>
-              <mat-option value="E">E</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+        <div class="form-field-group">
+          <div class="form-field tipo-cedula">
+            <label for="tipoCedula">Tipo</label>
+            <mat-form-field appearance="outline">
+              <mat-select id="tipoCedula" formControlName="tipoCedula" required>
+                <mat-option value="V">V</mat-option>
+                <mat-option value="E">E</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
 
-        <div class="form-field">
-          <label for="cedula">Cédula</label>
-          <mat-form-field appearance="outline">
-            <input matInput type="number" id="cedula" formControlName="cedula" required />
-            <mat-error *ngIf="signUpForm.invalid"
-              >Por favor ingrese su cédula</mat-error
-            >
-          </mat-form-field>
+          <div class="form-field cedula">
+            <label for="cedula">Cédula</label>
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                type="number"
+                id="cedula"
+                formControlName="cedula"
+                required
+              />
+              <mat-error *ngIf="signUpForm.invalid"
+                >Por favor ingrese su cédula</mat-error
+              >
+            </mat-form-field>
+          </div>
         </div>
 
         <div class="form-field">
@@ -53,7 +63,7 @@
               matInput
               [matDatepicker]="picker"
               formControlName="fechaNacimiento"
-              required 
+              required
             />
             <mat-datepicker-toggle
               matSuffix
@@ -69,7 +79,13 @@
         <div class="form-field">
           <label for="telefono">Teléfono</label>
           <mat-form-field appearance="outline">
-            <input matInput type="number" id="telefono" formControlName="telefono" required />
+            <input
+              matInput
+              type="number"
+              id="telefono"
+              formControlName="telefono"
+              required
+            />
             <mat-error *ngIf="signUpForm.invalid"
               >Por favor ingrese su teléfono</mat-error
             >
@@ -91,7 +107,13 @@
         <div class="form-field">
           <label for="correo">Correo Electrónico</label>
           <mat-form-field appearance="outline">
-            <input matInput type="email" id="correo" formControlName="correo" required />
+            <input
+              matInput
+              type="email"
+              id="correo"
+              formControlName="correo"
+              required
+            />
             <mat-error *ngIf="signUpForm.invalid"
               >Por favor ingrese un correo válido</mat-error
             >
@@ -219,6 +241,41 @@
               >Por favor ingrese la fecha de fin de vigencia</mat-error
             >
           </mat-form-field>
+        </div>
+        <div class="form-field radio-group">
+          <label>¿Es Titular?</label>
+          <mat-radio-group class="options">
+            <mat-radio-button value="1">Sí</mat-radio-button>
+            <mat-radio-button value="2">No</mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <div class="form-field-group">
+          <div class="form-field tipo-cedula">
+            <label for="tipoCedula">Tipo</label>
+            <mat-form-field appearance="outline">
+              <mat-select id="tipoCedula" formControlName="tipoCedula" required>
+                <mat-option value="V">V</mat-option>
+                <mat-option value="E">E</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field cedula">
+            <label for="cedula">Cédula Titular</label>
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                type="number"
+                id="cedula"
+                formControlName="cedula"
+                required
+              />
+              <mat-error *ngIf="signUpForm.invalid"
+                >Por favor ingrese su cédula</mat-error
+              >
+            </mat-form-field>
+          </div>
         </div>
       </div>
 

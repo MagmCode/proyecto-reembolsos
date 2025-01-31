@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 export class SignUpComponent implements OnInit {
   signUpForm!: FormGroup;
   hide = true;
+  hide2 = true;
 
   nombre!: FormControl;
   apellido!: FormControl;
@@ -25,6 +26,8 @@ export class SignUpComponent implements OnInit {
   nroPoliza!: FormControl;
   vigenteDesde!: FormControl;
   vigenteHasta!: FormControl;
+  titular!: FormControl;
+  cedulaTitular!: FormControl;
 
   constructor(
     private fb: FormBuilder,
@@ -47,6 +50,8 @@ export class SignUpComponent implements OnInit {
       nroPoliza: ['', Validators.required],
       vigenteDesde: ['', Validators.required],
       vigenteHasta: ['', Validators.required],
+      cedulaTitular: [''],
+      titular: ['', Validators.required],
     });
 
     this.nombre = this.signUpForm.get('nombre') as FormControl;
@@ -63,6 +68,19 @@ export class SignUpComponent implements OnInit {
     this.nroPoliza = this.signUpForm.get('nroPoliza') as FormControl;
     this.vigenteDesde = this.signUpForm.get('vigenciaDesde') as FormControl;
     this.vigenteHasta = this.signUpForm.get('vigenciaHasta') as FormControl;
+    this.titular = this.signUpForm.get('titular') as FormControl;
+    this.cedulaTitular = this.signUpForm.get('cedulaTitular') as FormControl;
+
+    this.onTitularChange({values: this.titular.value});
+  }
+
+  onTitularChange(event: any): void{
+    if (event.values === '2') {
+      this.cedulaTitular.setValidators([Validators.required]);
+    } else {
+      this.cedulaTitular.clearValidators();
+    }
+    this.cedulaTitular.updateValueAndValidity();
   }
 
   

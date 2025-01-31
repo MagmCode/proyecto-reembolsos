@@ -124,18 +124,17 @@
           <label for="clave">Clave</label>
           <mat-form-field appearance="outline">
             <input
-              matInput
-              [type]="hide ? 'password' : 'text'"
-              id="clave"
-              formControlName="clave"
-              required
-            />
+            id="clave"
+            matInput
+            type="password"
+            [formControlName]="'clave'"
+            #passwordField>
+            
             <button
-              mat-icon-button
-              matSuffix
-              (click)="hide = !hide"
-              [attr.aria-label]="'Hide password'"
-              [attr.aria-pressed]="hide"
+            mat-icon-button
+            type="button"
+            (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
+            matSuffix
             >
               <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
             </button>
@@ -149,18 +148,17 @@
           <label for="confirmarClave">Confirme la Clave</label>
           <mat-form-field appearance="outline">
             <input
-              matInput
-              [type]="hide2 ? 'password' : 'text'"
-              id="confirmarClave"
-              formControlName="confirmarClave"
-              required
-            />
+            id="confirmarClave"
+            matInput
+            type="password"
+            [formControlName]="'confirmarClave'"
+            #passwordField2>
+            
             <button
-              mat-icon-button
-              matSuffix
-              (click)="hide2 = !hide2"
-              [attr.aria-label]="'Hide password'"
-              [attr.aria-pressed]="hide2"
+            mat-icon-button
+            type="button"
+            (click)="passwordField2.type === 'password' ? passwordField2.type = 'text' : passwordField2.type = 'password'"
+            matSuffix
             >
               <mat-icon>{{ hide2 ? "visibility_off" : "visibility" }}</mat-icon>
             </button>

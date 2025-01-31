@@ -126,9 +126,9 @@ input[type=number] {
 /* Estilos responsivos para dispositivos móviles */
 @media (max-width: 600px) {
     .sign-up-container {
-        padding: 35rem 2rem;
+        padding: 36rem 2rem;
         background: linear-gradient(100deg, rgba(29, 112, 185, 0.664) 0%, rgba(97,163,220,1) 50%, rgba(0, 213, 255, 0.459) 100%);
-        min-height: 100vh; 
+        max-height: 100vh; 
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -136,8 +136,6 @@ input[type=number] {
   
     .sign-up-box {
       padding: 1rem;
-      border-radius: 15px;
-      margin: 2rem;
     }
   
     .header {

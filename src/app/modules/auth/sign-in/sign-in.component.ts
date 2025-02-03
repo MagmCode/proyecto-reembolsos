@@ -34,6 +34,11 @@ export class SignInComponent implements OnInit {
     }
   }
 
+  
+  togglePasswordVisibility() {
+    this.hide = !this.hide;
+  }
+
   getErrorMessage() {
     if (this.username.hasError('required')) {
       return 'Por favor rellene los campos';
@@ -44,4 +49,9 @@ export class SignInComponent implements OnInit {
   signUp() {
     this.router.navigate(['/sign-up']);
   }
+
+  forgotPassword(){
+    this.router.navigate(['/forgot-password'])
+  }
+  
 }

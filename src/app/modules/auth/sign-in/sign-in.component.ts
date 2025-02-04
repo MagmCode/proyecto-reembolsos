@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
 
@@ -20,17 +20,25 @@ export class SignInComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      username: ['', Validators.required],
+      username: ['', [Validators.required, this.noExponentNotation]],
       password: ['', Validators.required]
     });
 
     this.username = this.loginForm.get('username') as FormControl;
   }
 
+  noExponentNotation(control: AbstractControl): { [key: string]: boolean } | null {
+    const value = control.value;
+    if (value && value.toString().toLowerCase().includes('e')) {
+      return { 'noExponentNotation': true };
+    }
+    return null;
+  }
+
   onSubmit() {
     if (this.loginForm.valid) {
       console.log(this.loginForm.value);
-      this.router.navigate(['/home']);
+      this.router.navigate(['user/home-page']);
     }
   }
 
@@ -40,11 +48,12 @@ export class SignInComponent implements OnInit {
   }
 
   getErrorMessage() {
-    if (this.username.hasError('required')) {
-      return 'Por favor rellene los campos';
+    if (this.loginForm.get('username')?.hasError('noExponentNotation')) {
+      return 'No se permite la notación científica (e).';
     }
-    return this.username.hasError('username') ? 'Not a valid username' : '';
+    return 'Campo inválido';
   }
+
 
   signUp() {
     this.router.navigate(['/sign-up']);

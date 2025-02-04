@@ -35,6 +35,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
+import {MatStepperModule} from '@angular/material/stepper';
 
 
 
@@ -43,6 +44,7 @@ import { SignUpComponent } from './modules/auth/sign-up/sign-up.component';
 import { HomePageComponent } from './modules/user/home-page/home-page.component';
 import { FooterComponent } from './modules/pages/footer/footer.component';
 import { HeaderComponent } from './modules/pages/header/header.component';
+import { ForgotPasswordComponent } from './modules/user/forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,8 @@ import { HeaderComponent } from './modules/pages/header/header.component';
     SignUpComponent,
     HomePageComponent,
     FooterComponent,
-    HeaderComponent
+    HeaderComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -86,7 +89,8 @@ import { HeaderComponent } from './modules/pages/header/header.component';
     MatDatepickerModule,
     MatTooltipModule,
     MatCardModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatStepperModule,
     
 
     

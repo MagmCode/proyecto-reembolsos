@@ -77,7 +77,7 @@ export class HeaderComponent {
       if (this.sidenavOpen) {
         this.sidenavOpen = false;
       }
-      // this.router.navigate(['/home']);
+      this.router.navigate(['user/home-page']);
       
       // console.log('Home');
     }
@@ -87,10 +87,12 @@ export class HeaderComponent {
     }
   
     reembolso() {
+      this.router.navigate(['user/reembolso'])
       // console.log('Reembolso');
     }
   
     cartaAval() {
+      this.router.navigate(['user/carta-aval'])
       // console.log('Carta Aval');
     }
   }

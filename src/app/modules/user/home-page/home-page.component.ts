@@ -103,9 +103,11 @@ export class HomePageComponent implements OnInit {
 
   reembolso() {
     // console.log('Reembolso');
+    this.router.navigate(['user/reembolso'])
   }
 
   cartaAval() {
+    this.router.navigate(['user/carta-aval'])
     // console.log('Carta Aval');
   }
 }

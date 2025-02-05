@@ -14,7 +14,10 @@
     height: 1rem;
     position: relative;
     bottom: 0;
-    // width: 100%;
+    position: fixed;
+    left: 0;
+    right: 0;
+
   
     .footer-content {
       text-align: center;

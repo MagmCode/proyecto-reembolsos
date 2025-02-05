@@ -45,6 +45,8 @@ import { HomePageComponent } from './modules/user/home-page/home-page.component'
 import { FooterComponent } from './modules/pages/footer/footer.component';
 import { HeaderComponent } from './modules/pages/header/header.component';
 import { ForgotPasswordComponent } from './modules/user/forgot-password/forgot-password.component';
+import { ReembolsoComponent } from './modules/user/reembolso/reembolso.component';
+import { CartaAvalComponent } from './modules/user/carta-aval/carta-aval.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +56,9 @@ import { ForgotPasswordComponent } from './modules/user/forgot-password/forgot-p
     HomePageComponent,
     FooterComponent,
     HeaderComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ReembolsoComponent,
+    CartaAvalComponent
   ],
   imports: [
     BrowserModule,

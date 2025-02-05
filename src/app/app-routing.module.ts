@@ -5,6 +5,8 @@ import { SignUpComponent } from './modules/auth/sign-up/sign-up.component';
 import { NoAuthGuard } from "./core/auth/guards/no-auth.guard";
 import { HomePageComponent } from './modules/user/home-page/home-page.component';
 import { ForgotPasswordComponent } from './modules/user/forgot-password/forgot-password.component';
+import { ReembolsoComponent } from './modules/user/reembolso/reembolso.component';
+import { CartaAvalComponent } from './modules/user/carta-aval/carta-aval.component';
 
 const routes: Routes = [
   // Main Routes
@@ -18,6 +20,8 @@ const routes: Routes = [
 
 // Route to User's Home Page
   {path: 'user/home-page', component: HomePageComponent, canActivate: [NoAuthGuard]},
+  {path: 'user/reembolso', component: ReembolsoComponent, canActivate: [NoAuthGuard]},
+  {path: 'user/carta-aval', component: CartaAvalComponent, canActivate: [NoAuthGuard]},
 ];
 
 @NgModule({

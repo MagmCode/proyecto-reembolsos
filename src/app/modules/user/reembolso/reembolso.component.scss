@@ -34,6 +34,12 @@
     text-align: center;    
   }
 
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Alinea verticalmente los elementos */
+  }
+
 .card-title-factura {
     color: #1e88e5;
     font-size: 1.25rem;
@@ -57,10 +63,12 @@
     width: 17rem;
     align-items: center;
     justify-content: center;
+    height: 400px
   }
 
   .center-card{
     width: 1000px;
+    height: 550px;
     .mat-table {
         width: 100%
     }
@@ -153,6 +161,31 @@
     .estatus{
       margin-right: 60px;
     }
+  }
+  
+
+  .mat-table {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .mat-header-row, .mat-row {
+    display: flex;
+    width: 100%;
+  }
+  
+  .mat-header-cell, .mat-cell {
+    display: flex;
+    align-items: center; /* Asegura que los elementos dentro de las celdas estén alineados verticalmente */
+    justify-content: center; /* Centra el contenido horizontalmente */
+    padding: 16px;
+    flex: 1;
+  }
+  
+  .mat-header-cell.actions, .mat-cell.actions {
+    justify-content: center; /* Centra los íconos de acción */
+    padding: 0; /* Elimina el padding para centrar los íconos verticalmente */
+    height: 50px; /* Ajusta la altura según sea necesario */
   }
   
   

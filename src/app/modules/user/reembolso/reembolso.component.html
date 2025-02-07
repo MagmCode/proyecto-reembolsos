@@ -49,42 +49,42 @@
                             </button>
                         </mat-form-field>
                     </div>
-                    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                    <table mat-table [dataSource]="facturaDataSource" class="mat-elevation-z8">
                         <ng-container matColumnDef="nroFactura">
-                            <th mat-header-cell *matHeaderCellDef> Nro. Factura </th>
-                            <td mat-cell *matCellDef="let element"> {{element.nroFactura}} </td>
+                          <th mat-header-cell *matHeaderCellDef>Nro. Factura</th>
+                          <td mat-cell *matCellDef="let element">{{element.nroFactura}}</td>
                         </ng-container>
                         <ng-container matColumnDef="nroControl">
-                            <th mat-header-cell *matHeaderCellDef> Nro. Control </th>
-                            <td mat-cell *matCellDef="let element"> {{element.nroControl}} </td>
+                          <th mat-header-cell *matHeaderCellDef>Nro. Control</th>
+                          <td mat-cell *matCellDef="let element">{{element.nroControl}}</td>
                         </ng-container>
                         <ng-container matColumnDef="fechaFactura">
-                            <th mat-header-cell *matHeaderCellDef> Fecha Factura </th>
-                            <td mat-cell *matCellDef="let element"> {{element.fechaFactura}} </td>
+                          <th mat-header-cell *matHeaderCellDef>Fecha Factura</th>
+                          <td mat-cell *matCellDef="let element">{{element.fechaFactura}}</td>
                         </ng-container>
                         <ng-container matColumnDef="concepto">
-                            <th mat-header-cell *matHeaderCellDef> Concepto </th>
-                            <td mat-cell *matCellDef="let element"> {{element.concepto}} </td>
+                          <th mat-header-cell *matHeaderCellDef>Concepto</th>
+                          <td mat-cell *matCellDef="let element">{{element.concepto}}</td>
                         </ng-container>
                         <ng-container matColumnDef="monto">
-                            <th mat-header-cell *matHeaderCellDef> Monto </th>
-                            <td mat-cell *matCellDef="let element"> {{element.monto}} </td>
+                          <th mat-header-cell *matHeaderCellDef>Monto</th>
+                          <td mat-cell *matCellDef="let element">{{element.monto}}</td>
                         </ng-container>
                         <ng-container matColumnDef="comprobante">
-                            <th mat-header-cell *matHeaderCellDef> Comprobante </th>
-                            <td mat-cell *matCellDef="let element"> {{element.comprobante}} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="actions">
-                            <th mat-header-cell *matHeaderCellDef> </th>
-                            <td mat-cell *matCellDef="let element">
-                                <button mat-icon-button color="warn">
-                                    <mat-icon>delete</mat-icon>
-                                </button>
-                            </td>
+                          <th mat-header-cell *matHeaderCellDef>Comprobante</th>
+                          <td mat-cell *matCellDef="let element">{{element.comprobante}}</td>
                         </ng-container>
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>
+                    <div class="table-actions">
+                        <button mat-icon-button (click)="addRow()">
+                          <mat-icon>add</mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="deleteRow()">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
                 </mat-card-content>
             </mat-card>
 

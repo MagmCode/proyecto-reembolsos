@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/core/auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -14,6 +15,7 @@ export class HeaderComponent {
     constructor(
       private router: Router,
       private renderer: Renderer2,
+      private authService: AuthService,
     ) {}
   
     ngOnInit(): void {}
@@ -68,8 +70,7 @@ export class HeaderComponent {
     }
   
     logout() {
-      this.router.navigate(['/Login']);
-      // console.log('Logout');
+      this.authService.logout();
     }
   
     // Nav Menu

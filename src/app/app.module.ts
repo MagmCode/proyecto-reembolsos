@@ -36,6 +36,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import {MatStepperModule} from '@angular/material/stepper';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -63,6 +64,7 @@ import { CartaAvalComponent } from './modules/user/carta-aval/carta-aval.compone
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     AppRoutingModule,
     MatButtonModule,
     MatButtonToggleModule,

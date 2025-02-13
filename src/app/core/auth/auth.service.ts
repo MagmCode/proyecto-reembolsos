@@ -8,7 +8,8 @@ import { throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://180.183.66.248:8000/api/';  // URL de tu API en Django
+  // private apiUrl = 'http://180.183.66.248:8000/api/';  // URL de tu API en Django
+  private apiUrl = 'https://reembolso-backend.onrender.com/api';  // URL de tu API en Django
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -19,7 +20,7 @@ export class AuthService {
   }
 
   private handleError(error: HttpErrorResponse){
-    let errorMessage = 'Ocuarió un error. Intentálo de nuevo más tarde.';
+    let errorMessage = 'Ocurrió un error. Intentálo de nuevo más tarde.';
     if (error.status === 404) {
       errorMessage = 'Usuario no encontrado';
     } else if (error.status === 401) {

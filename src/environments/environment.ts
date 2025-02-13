@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://https://reembolso-backend.onrender.com/api/',
+  apiUrl: 'https://reembolso-backend.onrender.com/api/',
 };
 
 /*

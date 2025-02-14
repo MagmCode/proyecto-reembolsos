@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth/auth.service'; 
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatProgressSpinner } from '@angular/material/progress-spinner'; 
+
 
 
 
@@ -18,6 +20,7 @@ export class SignInComponent implements OnInit {
   password!: FormControl;
   hide = true;
   errorMessage: string | null = null;
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -47,18 +50,23 @@ export class SignInComponent implements OnInit {
 
   onSubmit() {
     if (this.loginForm.valid) {
+      this.isLoading = true;  // Inicia el estado de carga
+  
       const { username, password } = this.loginForm.value;
       this.authService.login(username, password).subscribe(
         (response: any) => {
+          this.isLoading = false;  // Finaliza el estado de carga
           localStorage.setItem('access_token', response.access);  // Guardar el token en localStorage
           this.router.navigate(['user/home-page']);
         },
         (error) => {
+          this.isLoading = false;  // Asegura que el estado de carga se desactive incluso si hay error
           this.showSnackBar(error);  // Mostrar el mensaje de error en un SnackBar
         }
       );
     }
   }
+  
 
   showSnackBar(message: string) {
     this._snackBar.open(message, 'Cerrar', {

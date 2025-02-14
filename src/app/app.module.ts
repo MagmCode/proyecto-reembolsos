@@ -40,6 +40,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 
 
+
 import { SignInComponent } from './modules/auth/sign-in/sign-in.component';
 import { SignUpComponent } from './modules/auth/sign-up/sign-up.component';
 import { HomePageComponent } from './modules/user/home-page/home-page.component';
@@ -97,6 +98,7 @@ import { CartaAvalComponent } from './modules/user/carta-aval/carta-aval.compone
     MatCardModule,
     MatSidenavModule,
     MatStepperModule,
+    MatProgressSpinnerModule,
     
 
     

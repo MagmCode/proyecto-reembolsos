@@ -80,12 +80,25 @@
 .login-button {
   margin-bottom: 3rem;
   button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: #0067b1;
     color: white;
     width: 300px;
     height: 45px;
     border-radius: 20px;
   }
+}
+
+.white-spinner {
+  margin: 0;
+  padding: 0;
+}
+
+::ng-deep .white-spinner .mat-progress-spinner circle,
+::ng-deep .white-spinner .mat-spinner circle {
+  stroke: white !important;
 }
 
 .register-link {

@@ -36,10 +36,24 @@
         <a (click)="forgotPassword()">¿Olvidó su Contraseña?</a>
       </div>
       <div class="login-button">
-        <button mat-raised-button (click)="onSubmit()">
-          Ingresar
+        <button 
+          mat-raised-button 
+          color="primary" 
+          (click)="onSubmit()" 
+          [disabled]="isLoading || loginForm.invalid">
+          <ng-container *ngIf="!isLoading">
+            Ingresar
+          </ng-container>
+          <ng-container *ngIf="isLoading">
+            <mat-progress-spinner 
+            [diameter]="24" 
+            mode="indeterminate"
+            class="white-spinner"> >
+            </mat-progress-spinner>
+          </ng-container>
         </button>
       </div>
+      
       <div class="register-link">
         <a (click)="signUp()">¡Regístrate Aquí!</a>
       </div>

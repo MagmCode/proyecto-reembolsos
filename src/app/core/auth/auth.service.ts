@@ -8,8 +8,8 @@ import { throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  // private apiUrl = 'http://180.183.66.248:8000/api/';  // URL de tu API en Django
-  private apiUrl = 'https://reembolso-backend.onrender.com/api';  // URL de tu API en Django
+  // private apiUrl = 'http://180.183.66.248:8000/api/';  // URL de tu API en Django local
+  private apiUrl = 'https://reembolso-backend.onrender.com/api/';  // URL de tu API en Django Produccion
 
   constructor(private http: HttpClient, private router: Router) { }
 

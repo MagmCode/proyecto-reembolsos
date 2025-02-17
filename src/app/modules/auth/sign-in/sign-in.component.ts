@@ -55,6 +55,7 @@ export class SignInComponent implements OnInit {
       const { username, password } = this.loginForm.value;
       this.authService.login(username, password).subscribe(
         (response: any) => {
+          // console.log('Usuario: ',username, 'contraseña: ', password);
           this.isLoading = false;  // Finaliza el estado de carga
           localStorage.setItem('access_token', response.access);  // Guardar el token en localStorage
           this.router.navigate(['user/home-page']);

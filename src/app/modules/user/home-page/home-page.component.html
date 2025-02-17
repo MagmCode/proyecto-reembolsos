@@ -5,7 +5,8 @@
 <main class="main-content">
   <div class="content-wrapper">
     <div class="info-section">
-      <h1 class="welcome-text">¡Bienvenido!</h1>
+      <h1 *ngIf="isAdmin==false" class="welcome-text">¡Bienvenido!</h1>
+      <h1 *ngIf="isAdmin==true" class="welcome-text">¡Bienvenido Admin!</h1>
             <p class="description">
               En RM Express, atender a nuestros <br />
               clientes es nuestra prioridad.

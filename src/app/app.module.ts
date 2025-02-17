@@ -49,6 +49,8 @@ import { HeaderComponent } from './modules/pages/header/header.component';
 import { ForgotPasswordComponent } from './modules/user/forgot-password/forgot-password.component';
 import { ReembolsoComponent } from './modules/user/reembolso/reembolso.component';
 import { CartaAvalComponent } from './modules/user/carta-aval/carta-aval.component';
+import { EditProfileComponent } from './modules/user/edit-profile/edit-profile.component';
+import { ChangePasswordComponent } from './modules/user/change-password/change-password.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +62,9 @@ import { CartaAvalComponent } from './modules/user/carta-aval/carta-aval.compone
     HeaderComponent,
     ForgotPasswordComponent,
     ReembolsoComponent,
-    CartaAvalComponent
+    CartaAvalComponent,
+    EditProfileComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,

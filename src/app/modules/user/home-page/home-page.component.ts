@@ -1,5 +1,6 @@
 import { Component, OnInit, Renderer2 } from "@angular/core";
 import { Router } from "@angular/router";
+import { AuthService } from 'src/app/core/auth/auth.service';
 
 @Component({
   selector: "app-home-page",
@@ -9,13 +10,21 @@ import { Router } from "@angular/router";
 export class HomePageComponent implements OnInit {
   menuOpen = false;
   sidenavOpen = false;
+  isAdmin = false; // Variable para almacenar si el usuario es admin
+  username = 'Usuario'; // Variable para almacenar el nombre de usuario
 
   constructor(
     private router: Router,
     private renderer: Renderer2,
+    private authService: AuthService,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Obtener el rol y el nombre de usuario al inicializar el componente
+    this.isAdmin = this.authService.getUserRole();
+    this.username = this.authService.getName(); // Obtener el nombre completo
+  }
+
 
   showMenu() {
     this.menuOpen = true;

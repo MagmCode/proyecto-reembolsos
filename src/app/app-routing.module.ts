@@ -8,6 +8,8 @@ import { ForgotPasswordComponent } from './modules/user/forgot-password/forgot-p
 import { ReembolsoComponent } from './modules/user/reembolso/reembolso.component';
 import { CartaAvalComponent } from './modules/user/carta-aval/carta-aval.component';
 import { AuthGuard } from './core/auth/guards/auth.guard';
+import { EditProfileComponent } from './modules/user/edit-profile/edit-profile.component';
+import { ChangePasswordComponent } from './modules/user/change-password/change-password.component';
 
 const routes: Routes = [
   // Main Routes
@@ -21,8 +23,10 @@ const routes: Routes = [
 
 // Route to User's Home Page
   {path: 'user/home-page', component: HomePageComponent, canActivate: [AuthGuard]},
-  {path: 'user/reembolso', component: ReembolsoComponent, canActivate: [NoAuthGuard]},
-  {path: 'user/carta-aval', component: CartaAvalComponent, canActivate: [NoAuthGuard]},
+  {path: 'user/reembolso', component: ReembolsoComponent, canActivate: [AuthGuard]},
+  {path: 'user/carta-aval', component: CartaAvalComponent, canActivate: [AuthGuard]},
+  {path: 'user/editar-perfil', component: EditProfileComponent, canActivate: [AuthGuard]},
+  {path: 'user/cambiar-password', component: ChangePasswordComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({

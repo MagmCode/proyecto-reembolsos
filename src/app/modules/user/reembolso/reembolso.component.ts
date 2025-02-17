@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator'; // Importa MatPaginator
+import { MatPaginator } from '@angular/material/paginator'; 
 
 interface Factura {
   nroFactura: string;

@@ -241,15 +241,15 @@
             >
           </mat-form-field>
         </div>
-        <div class="form-field radio-group">
+        <!-- <div class="form-field radio-group">
           <label>¿Es Titular?</label>
           <mat-radio-group class="options" formControlName="titular" (change)="onTitularChange($event)">
             <mat-radio-button color="primary" value="1">Sí</mat-radio-button>
             <mat-radio-button color="primary" value="2">No</mat-radio-button>
           </mat-radio-group>
-        </div>
+        </div> -->
 
-        <div class="form-field-group" *ngIf="signUpForm.get('titular')?.value === '2'">
+        <!-- <div class="form-field-group" *ngIf="signUpForm.get('titular')?.value === '2'">
           <div class="form-field tipo-cedula">
             <label for="tipoCedula">Tipo</label>
             <mat-form-field appearance="outline">
@@ -275,7 +275,7 @@
               >
             </mat-form-field>
           </div>
-        </div>
+        </div> -->
       </div>
 
       <div class="register-button">

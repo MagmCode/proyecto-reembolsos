@@ -48,25 +48,34 @@ export class SignInComponent implements OnInit {
     return null;
   }
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      this.isLoading = true;  // Inicia el estado de carga
-  
-      const { username, password } = this.loginForm.value;
-      this.authService.login(username, password).subscribe(
-        (response: any) => {
-          // console.log('Usuario: ',username, 'contraseña: ', password);
-          this.isLoading = false;  // Finaliza el estado de carga
-          localStorage.setItem('access_token', response.access);  // Guardar el token en localStorage
-          this.router.navigate(['user/home-page']);
-        },
-        (error) => {
-          this.isLoading = false;  // Asegura que el estado de carga se desactive incluso si hay error
-          this.showSnackBar(error);  // Mostrar el mensaje de error en un SnackBar
+  // login.component.ts
+onSubmit() {
+  if (this.loginForm.valid) {
+    this.isLoading = true;
+
+    const { username, password } = this.loginForm.value;
+
+    this.authService.login(username, password).subscribe(
+      (response: any) => {
+        this.isLoading = false;
+        const token = response.access;
+        const isAdmin = response.is_admin === true;  // Convertir a booleano
+        this.authService.setSession(token, isAdmin);
+
+        if (isAdmin) {
+          this.router.navigate(['/admin/dashboard']);
+        } else {
+          this.router.navigate(['/user/home-page']);
         }
-      );
-    }
+      },
+      (error) => {
+        this.isLoading = false;
+        this.showSnackBar(error);
+      }
+    );
   }
+}
+
   
 
   showSnackBar(message: string) {

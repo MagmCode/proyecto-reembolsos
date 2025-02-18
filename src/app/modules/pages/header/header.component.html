@@ -4,9 +4,11 @@
     <img src="../../../../assets/images/Logo.png" alt="Logo" class="logo-header" />
   </div>
   <nav class="nav-links">
-    <a (click)="home()">Inicio</a>
-    <a (click)="reembolso()">Reembolso</a>
-    <a (click)="cartaAval()">Carta Aval</a>
+    <a (click)="isAdmin ? dashboard() : home()">Inicio</a>
+    <a *ngIf="isAdmin" (click)="historial()">Historial</a>
+    <a *ngIf="isAdmin" (click)="reportes()">Reportes</a>
+    <a (click)="isAdmin ? adminReembolso() : reembolso()">Reembolso</a>
+    <a (click)="isAdmin ? adminCartaAval() : cartaAval()">Carta Aval</a>
   </nav>
   <div class="user-info" (mouseenter)="showMenu()" (mouseleave)="hideMenu()">
     <mat-icon class="user-icon">person</mat-icon>
@@ -15,11 +17,11 @@
       <mat-icon class="arrow-icon">arrow_drop_down</mat-icon>
     </span>
     <div class="user-menu" *ngIf="menuOpen" (mouseenter)="showMenu()" (mouseleave)="hideMenu()">
-      <a (click)="editProfile()">
+      <a (click)="isAdmin ? editAdminProfile() : editProfile()">
         Editar Perfil
         <mat-icon class="user-menu-icon">edit</mat-icon>
       </a>
-      <a (click)="changePassword()">
+      <a (click)="isAdmin ? changePasswordAdmin() : changePassword()">
         Cambio de clave
         <mat-icon class="user-menu-icon">password</mat-icon>
       </a>
@@ -42,9 +44,11 @@
   (openedChange)="onSidenavChange($event)"
   >
   <nav class="nav-links-side">
-    <a (click)="home()">Inicio</a>
-    <a (click)="reembolso()">Reembolso</a>
-    <a (click)="cartaAval()">Carta Aval</a>
+    <a (click)="isAdmin ? dashboard() : home()">Inicio</a>
+    <a *ngIf="isAdmin" (click)="historial()">Historial</a>
+    <a *ngIf="isAdmin" (click)="reportes()">Reportes</a>
+    <a (click)="isAdmin ? adminReembolso() : reembolso()">Reembolso</a>
+    <a (click)="isAdmin ? adminCartaAval() : cartaAval()">Carta Aval</a>
   </nav>
   </mat-sidenav>
   <mat-sidenav-content   (click)="closeSidenav($event)" class="main-sidenav-content">

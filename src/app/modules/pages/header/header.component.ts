@@ -22,7 +22,7 @@ export class HeaderComponent {
 
   ngOnInit(): void {
     // Obtener el rol y el nombre de usuario al inicializar el componente
-    this.isAdmin = this.authService.getUserRole();
+    this.isAdmin = this.authService.isAdmin();
     // this.username = this.authService.getFullName(); // Obtener el nombre completo
     this.username = this.authService.getName(); // Obtener el nombre completo
   }
@@ -76,15 +76,6 @@ export class HeaderComponent {
     this.router.navigate(['user/cambiar-password']);
   }
 
-  assignProfile() {
-    this.router.navigate(['admin/asignar-perfil']); // Ruta para asignar perfil (solo admin)
-  }
-
-  logout() {
-    this.authService.logout();
-  }
-
-  // Nav Menu
   home() {
     if (this.sidenavOpen) {
       this.sidenavOpen = false;
@@ -103,4 +94,45 @@ export class HeaderComponent {
   cartaAval() {
     this.router.navigate(['user/carta-aval']);
   }
+
+// admin
+  assignProfile() {
+    this.router.navigate(['admin/asignar-perfil']); // Ruta para asignar perfil (solo admin)
+  }
+
+  dashboard() {
+    if (this.sidenavOpen) {
+      this.sidenavOpen = false;
+    }
+    this.router.navigate(['admin/dashboard']); // Ruta para el dashboard (solo admin)
+  }
+
+  historial() {
+    this.router.navigate(['admin/historial']);
+  }
+  reportes() {
+    this.router.navigate(['admin/reportes']);
+  }
+
+  adminReembolso() {
+    this.router.navigate(['admin/reembolso']);
+  }
+
+  adminCartaAval() {
+    this.router.navigate(['admin/carta-aval']);
+  }
+
+  editAdminProfile() {
+    this.router.navigate(['admin/editar-perfil']);
+  }
+  changePasswordAdmin() {
+    this.router.navigate(['admin/cambiar-password']);
+  }
+
+
+
+  logout() {
+    this.authService.logout();
+  }
+
 }

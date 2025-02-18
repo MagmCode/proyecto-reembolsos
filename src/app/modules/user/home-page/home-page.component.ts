@@ -21,7 +21,7 @@ export class HomePageComponent implements OnInit {
 
   ngOnInit(): void {
     // Obtener el rol y el nombre de usuario al inicializar el componente
-    this.isAdmin = this.authService.getUserRole();
+    this.isAdmin = this.authService.isAdmin();
     this.username = this.authService.getName(); // Obtener el nombre completo
   }
 

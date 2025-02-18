@@ -10,10 +10,12 @@ import { throwError } from "rxjs";
 export class AuthService {
   private inactivityTimer: any;
   private readonly inactivityDuration = 5 * 60 * 1000; // 5 minutes
+  private tokenKey = 'access_token';
+  private roleKey = 'user_role';
 
   // URL de conexion
-  // private apiUrl = "http://180.183.66.248:8000/api/"; // URL de tu API en Django local
-  private apiUrl = 'https://reembolso-backend.onrender.com/api/';  // URL de tu API en Django Produccion
+  private apiUrl = "http://180.183.66.248:8000/api/"; // URL de tu API en Django local
+  // private apiUrl = 'https://reembolso-backend.onrender.com/api/';  // URL de tu API en Django Produccion
 
   constructor(
     private http: HttpClient,
@@ -48,6 +50,12 @@ export class AuthService {
     return throwError(errorMessage);
   }
 
+
+   // Método para guardar el token y el rol del usuario al iniciar sesión
+   setSession(token: string, isAdmin: boolean): void {
+    localStorage.setItem(this.tokenKey, token);
+    localStorage.setItem('is_admin', JSON.stringify(isAdmin));
+  }
   logout() {
     localStorage.removeItem("access_token");
     this.router.navigate(["/Login"]);
@@ -57,9 +65,20 @@ export class AuthService {
     return !!localStorage.getItem("access_token");
   }
 
-  getUserRole(): boolean {
+  isAdmin(): boolean {
     return localStorage.getItem("is_admin") === "true"; // Convertir a booleano
   }
+
+  getToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
+  }
+
+    // Método para verificar si el usuario está autenticado
+    isAuthenticated(): boolean {
+      return !!this.getToken();
+    }
+
+    
 
   getUsername(): string {
     return localStorage.getItem("username") || "Usuario"; // Valor por defecto

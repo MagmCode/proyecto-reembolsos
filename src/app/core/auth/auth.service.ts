@@ -14,8 +14,8 @@ export class AuthService {
   private roleKey = 'user_role';
 
   // URL de conexion
-  private apiUrl = "http://180.183.66.248:8000/api/"; // URL de tu API en Django local
-  // private apiUrl = 'https://reembolso-backend.onrender.com/api/';  // URL de tu API en Django Produccion
+  // private apiUrl = "http://180.183.66.248:8000/api/"; // URL de tu API en Django local
+  private apiUrl = 'https://reembolso-backend.onrender.com/api/';  // URL de tu API en Django Produccion
 
   constructor(
     private http: HttpClient,

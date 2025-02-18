@@ -51,6 +51,17 @@ import { ReembolsoComponent } from './modules/user/reembolso/reembolso.component
 import { CartaAvalComponent } from './modules/user/carta-aval/carta-aval.component';
 import { EditProfileComponent } from './modules/user/edit-profile/edit-profile.component';
 import { ChangePasswordComponent } from './modules/user/change-password/change-password.component';
+import { DashboardComponent } from './modules/admin/dashboard/dashboard.component';
+import { HistorialComponent } from './modules/admin/historial/historial.component';
+import { ReembolsoAdminComponent } from './modules/admin/reembolso-admin/reembolso-admin.component';
+import { CartaavalAdminComponent } from './modules/admin/cartaaval-admin/cartaaval-admin.component';
+import { EditProfileAdminComponent } from './modules/admin/edit-profile-admin/edit-profile-admin.component';
+import { ChangePasswordAdminComponent } from './modules/admin/change-password-admin/change-password-admin.component';
+import { AsignProfileComponent } from './modules/admin/asign-profile/asign-profile.component';
+import { UnauthorizedComponent } from './modules/pages/unauthorized/unauthorized.component';
+import { ReportesComponent } from './modules/admin/reportes/reportes.component';
+import { DetalleReembolsoComponent } from './modules/admin/detalle-reembolso/detalle-reembolso.component';
+import { DetalleCartaavalComponent } from './modules/admin/detalle-cartaaval/detalle-cartaaval.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +75,18 @@ import { ChangePasswordComponent } from './modules/user/change-password/change-p
     ReembolsoComponent,
     CartaAvalComponent,
     EditProfileComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    DashboardComponent,
+    HistorialComponent,
+    ReembolsoAdminComponent,
+    CartaavalAdminComponent,
+    EditProfileAdminComponent,
+    ChangePasswordAdminComponent,
+    AsignProfileComponent,
+    UnauthorizedComponent,
+    ReportesComponent,
+    DetalleReembolsoComponent,
+    DetalleCartaavalComponent
   ],
   imports: [
     BrowserModule,

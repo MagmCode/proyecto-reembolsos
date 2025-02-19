@@ -36,7 +36,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import {MatStepperModule} from '@angular/material/stepper';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { CsrfInterceptor } from './services/csrf.interceptor';
 
 
 
@@ -86,7 +87,7 @@ import { DetalleCartaavalComponent } from './modules/admin/detalle-cartaaval/det
     UnauthorizedComponent,
     ReportesComponent,
     DetalleReembolsoComponent,
-    DetalleCartaavalComponent
+    DetalleCartaavalComponent,
   ],
   imports: [
     BrowserModule,
@@ -126,10 +127,13 @@ import { DetalleCartaavalComponent } from './modules/admin/detalle-cartaaval/det
     MatStepperModule,
     MatProgressSpinnerModule,
     
+    
 
     
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: CsrfInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

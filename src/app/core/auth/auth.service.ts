@@ -2,7 +2,7 @@ import { Injectable, NgZone } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { catchError, tap } from "rxjs/operators";
-import { throwError } from "rxjs";
+import { BehaviorSubject, Observable, throwError } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -12,16 +12,20 @@ export class AuthService {
   private readonly inactivityDuration = 5 * 60 * 1000; // 5 minutes
   private tokenKey = 'access_token';
   private roleKey = 'user_role';
+  private currentUserSubject!: BehaviorSubject<any>;
+  public currentUser!: Observable<any>;
 
-  // URL de conexion
+  // URL de conexión
   // private apiUrl = "http://180.183.66.248:8000/api/"; // URL de tu API en Django local
-  private apiUrl = 'https://reembolso-backend.onrender.com/api/';  // URL de tu API en Django Produccion
+  private apiUrl = 'https://reembolso-backend.onrender.com/api/';  // URL de tu API en Django Producción
 
   constructor(
     private http: HttpClient,
     private router: Router,
     private _ngZone: NgZone
   ) {
+    this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('currentUser') || '{}'));
+    this.currentUser = this.currentUserSubject.asObservable();
     this.resetInactivityTimer();
     this.setupActivityListeners();
   }
@@ -36,12 +40,13 @@ export class AuthService {
         localStorage.setItem("username", response.username);
         localStorage.setItem("first_name", response.first_name);
         localStorage.setItem("last_name", response.last_name);
+        this.currentUserSubject.next(response); // Actualizar el currentUser
       })
     );
   }
 
   private handleError(error: HttpErrorResponse) {
-    let errorMessage = "Ocurrió un error. Intentálo de nuevo más tarde.";
+    let errorMessage = "Ocurrió un error. Inténtalo de nuevo más tarde.";
     if (error.status === 404) {
       errorMessage = "Usuario no encontrado";
     } else if (error.status === 401) {
@@ -50,15 +55,47 @@ export class AuthService {
     return throwError(errorMessage);
   }
 
-
-   // Método para guardar el token y el rol del usuario al iniciar sesión
-   setSession(token: string, isAdmin: boolean): void {
+  // Método para guardar el token y el rol del usuario al iniciar sesión
+  setSession(token: string, isAdmin: boolean): void {
     localStorage.setItem(this.tokenKey, token);
     localStorage.setItem('is_admin', JSON.stringify(isAdmin));
   }
+
   logout() {
+    // Elimina todos los datos del usuario
     localStorage.removeItem("access_token");
-    this.router.navigate(["/Login"]);
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("is_admin");
+    localStorage.removeItem("username");
+    localStorage.removeItem("first_name");
+    localStorage.removeItem("last_name");
+  
+    this.currentUserSubject.next(null); // Actualizar el currentUser
+  
+    // Realiza una solicitud al backend para destruir la sesión en el servidor
+    this.http.post<any>(`${this.apiUrl}logout/`, {}).subscribe(() => {
+      this.router.navigate(["/Login"]);
+    }, (error) => {
+      console.error('Error during logout:', error);
+      // Manejar el error si es necesario
+    });
+  }
+  
+
+  verifyToken() {
+    const token = this.getToken();
+    if (!token) {
+      return false;
+    }
+
+    return this.http.get(`${this.apiUrl}verify-token/`, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).pipe(
+      catchError(() => {
+        this.logout(); // Si el token no es válido, cierra la sesión
+        return throwError("Token inválido");
+      })
+    );
   }
 
   isLoggedIn(): boolean {
@@ -73,12 +110,10 @@ export class AuthService {
     return localStorage.getItem(this.tokenKey);
   }
 
-    // Método para verificar si el usuario está autenticado
-    isAuthenticated(): boolean {
-      return !!this.getToken();
-    }
-
-    
+  // Método para verificar si el usuario está autenticado
+  isAuthenticated(): boolean {
+    return !!this.getToken();
+  }
 
   getUsername(): string {
     return localStorage.getItem("username") || "Usuario"; // Valor por defecto
@@ -89,10 +124,12 @@ export class AuthService {
     const lastName = localStorage.getItem('last_name') || '';
     return `${firstName} ${lastName}`.trim(); // Devuelve el nombre completo
   }
+
   getName(): string {
     const firstName = localStorage.getItem('first_name') || '';
     return `${firstName}`; // Devuelve el nombre completo
   }
+
   private resetInactivityTimer() {
     this._ngZone.runOutsideAngular(() => {
       clearTimeout(this.inactivityTimer);

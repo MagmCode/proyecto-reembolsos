@@ -14,8 +14,12 @@
   
   .reembolso-title {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 4rem;
     color: #3bb2f6;
+  }
+
+  ::ng-deep .mat-sort-header-arrow {
+    color: #ffffff !important;
   }
   
   .reembolso-controls {
@@ -36,6 +40,17 @@
   
     mat-form-field {
       width: 250px;
+    }
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    margin-right: 5px;
+    label {
+      color: #757575;
+      margin-left: 7px;
     }
   }
   

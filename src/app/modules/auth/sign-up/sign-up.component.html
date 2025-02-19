@@ -6,12 +6,12 @@
       >
       <h2>Formulario de Registro</h2>
     </div>
-    <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" autocomplete="off">
       <div class="form-grid">
         <div class="form-field">
           <label for="nombre">Nombre</label>
           <mat-form-field appearance="outline">
-            <input matInput id="nombre" formControlName="nombre" required />
+            <input matInput id="nombre" formControlName="nombre" required #inputField/>
             <mat-error *ngIf="signUpForm.invalid"
               >Por favor ingrese su nombre</mat-error
             >
@@ -21,7 +21,7 @@
         <div class="form-field">
           <label for="apellido">Apellido</label>
           <mat-form-field appearance="outline">
-            <input matInput id="apellido" formControlName="apellido" required />
+            <input matInput id="apellido" formControlName="apellido" required #inputField/>
             <mat-error *ngIf="signUpForm.invalid"
               >Por favor ingrese su apellido</mat-error
             >
@@ -48,6 +48,7 @@
                 id="cedula"
                 formControlName="cedula"
                 required
+                #inputField
               />
               <mat-error *ngIf="signUpForm.invalid"
                 >Por favor ingrese su cédula</mat-error
@@ -64,6 +65,7 @@
               [matDatepicker]="picker"
               formControlName="fechaNacimiento"
               required
+              #inputField
             />
             <mat-datepicker-toggle
               matSuffix
@@ -85,6 +87,7 @@
               id="telefono"
               formControlName="telefono"
               required
+              #inputField
             />
             <mat-error *ngIf="signUpForm.invalid"
               >Por favor ingrese su teléfono</mat-error
@@ -100,6 +103,7 @@
               type="number"
               id="telefonoOpcional"
               formControlName="telefonoOpcional"
+              #inputField
             />
           </mat-form-field>
         </div>
@@ -113,6 +117,7 @@
               id="correo"
               formControlName="correo"
               required
+              #inputField
             />
             <mat-error *ngIf="signUpForm.invalid"
               >Por favor ingrese un correo válido</mat-error
@@ -124,17 +129,19 @@
           <label for="clave">Clave</label>
           <mat-form-field appearance="outline">
             <input
-            id="clave"
-            matInput
-            type="password"
-            [formControlName]="'clave'"
-            #passwordField>
-            
+              id="clave"
+              matInput
+              [type]="hide ? 'password' : 'text'" 
+              [formControlName]="'clave'"
+              #passwordField
+              #inputField
+            />
+
             <button
-            mat-icon-button
-            type="button"
-            (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
-            matSuffix
+              mat-icon-button
+              type="button"
+              (click)="togglePasswordVisibility()"
+              matSuffix
             >
               <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
             </button>
@@ -148,24 +155,25 @@
           <label for="confirmarClave">Confirme la Clave</label>
           <mat-form-field appearance="outline">
             <input
-            id="confirmarClave"
-            matInput
-            type="password"
-            [formControlName]="'confirmarClave'"
-            #passwordField2>
-            
+              id="confirmarClave"
+              matInput
+              [type]="hide2 ? 'password' : 'text'" 
+              [formControlName]="'confirmarClave'"
+              #passwordField2
+              #inputField
+            />
+
             <button
-            mat-icon-button
-            type="button"
-            (click)="passwordField2.type === 'password' ? passwordField2.type = 'text' : passwordField2.type = 'password'"
-            matSuffix
+              mat-icon-button
+              type="button"
+              (click)="togglePasswordVisibility2()"
+              matSuffix
             >
               <mat-icon>{{ hide2 ? "visibility_off" : "visibility" }}</mat-icon>
             </button>
             <mat-error *ngIf="signUpForm.invalid"
               >Por favor confirme su clave</mat-error
             >
-            
           </mat-form-field>
         </div>
 
@@ -177,6 +185,7 @@
               id="aseguradora"
               formControlName="aseguradora"
               required
+              #inputField
             />
             <mat-error *ngIf="signUpForm.invalid"
               >Por favor ingrese su aseguradora</mat-error
@@ -209,6 +218,7 @@
               id="vigenteDesde"
               formControlName="vigenteDesde"
               required
+              #inputField
             />
             <mat-datepicker-toggle
               matSuffix
@@ -230,6 +240,7 @@
               id="vigenteHasta"
               formControlName="vigenteHasta"
               required
+              #inputField
             />
             <mat-datepicker-toggle
               matSuffix

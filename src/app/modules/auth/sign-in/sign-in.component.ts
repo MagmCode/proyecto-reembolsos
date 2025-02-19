@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth/auth.service'; 
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { MatProgressSpinner } from '@angular/material/progress-spinner'; 
 
 
 
@@ -21,6 +20,8 @@ export class SignInComponent implements OnInit {
   hide = true;
   errorMessage: string | null = null;
   isLoading = false;
+
+  @ViewChildren('inputField') inputFields!: QueryList<any>;
 
   constructor(
     private fb: FormBuilder,
@@ -74,6 +75,19 @@ onSubmit() {
       }
     );
   }
+}
+
+
+ngAfterViewInit() {
+  this.inputFields.forEach(input => {
+    input.nativeElement.addEventListener('copy', this.disableCopyPaste);
+    input.nativeElement.addEventListener('paste', this.disableCopyPaste);
+    input.nativeElement.addEventListener('cut', this.disableCopyPaste);
+  });
+}
+
+disableCopyPaste(event: Event): void {
+  event.preventDefault();
 }
 
   

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -28,6 +28,9 @@ export class SignUpComponent implements OnInit {
   vigenteHasta!: FormControl;
   titular!: FormControl;
   cedulaTitular!: FormControl;
+
+
+   @ViewChildren('inputField') inputFields!: QueryList<any>;
 
   constructor(
     private fb: FormBuilder,
@@ -93,6 +96,27 @@ export class SignUpComponent implements OnInit {
     } else {
       this.signUpForm.markAllAsTouched();
     }
+  }
+
+
+  ngAfterViewInit() {
+    this.inputFields.forEach(input => {
+      input.nativeElement.addEventListener('copy', this.disableCopyPaste);
+      input.nativeElement.addEventListener('paste', this.disableCopyPaste);
+      input.nativeElement.addEventListener('cut', this.disableCopyPaste);
+    });
+  }
+
+  togglePasswordVisibility() {
+    this.hide = !this.hide;
+  }
+
+  togglePasswordVisibility2() {
+    this.hide2 = !this.hide2;
+  }
+  
+  disableCopyPaste(event: Event): void {
+    event.preventDefault();
   }
 
   onClose() {

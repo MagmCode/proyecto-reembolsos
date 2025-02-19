@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, QueryList, ViewChildren } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -13,6 +13,8 @@ export class ForgotPasswordComponent implements OnInit {
   passwordForm!: FormGroup;
   hide = true;
   hide2 = true;
+
+  @ViewChildren('inputField') inputFields!: QueryList<any>;
 
   constructor(
     private fb: FormBuilder,
@@ -46,6 +48,18 @@ export class ForgotPasswordComponent implements OnInit {
         emailControl.markAsTouched();
       }
     }
+  }
+
+  ngAfterViewInit() {
+    this.inputFields.forEach(input =>{
+      input.nativeElement.addEventListener('copy', this.disableCopyPaste);
+      input.nativeElement.addEventListener('paste', this.disableCopyPaste);
+      input.nativeElement.addEventListener('cut', this.disableCopyPaste);
+    });
+  }
+
+  disableCopyPaste(event: Event): void {
+    event.preventDefault();
   }
 
   onPasswordSubmit() {

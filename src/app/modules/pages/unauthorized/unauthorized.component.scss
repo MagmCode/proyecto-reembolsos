@@ -3,7 +3,9 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f5f5f5;
+    background: url('/assets/images/background.png') no-repeat center center;
+    background-size: cover;
+    position: relative;
   }
   
   .unauthorized-card {
@@ -11,6 +13,13 @@
     text-align: center;
     max-width: 400px;
     width: 90%;
+
+    .block{
+      color: red;
+    font-size: 85px;
+    width: 100px;
+    // height: 86px;
+    }
   
     h1 {
       font-size: 2rem;

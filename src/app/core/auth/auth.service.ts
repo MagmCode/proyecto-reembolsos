@@ -16,8 +16,8 @@ export class AuthService {
   public currentUser!: Observable<any>;
 
   // URL de conexión
-  // private apiUrl = "http://180.183.66.248:8000/api/"; // URL de tu API en Django local
-  private apiUrl = 'https://reembolso-backend.onrender.com/api/';  // URL de tu API en Django Producción
+  private apiUrl = "http://180.183.66.248:8000/api/"; // URL de tu API en Django local
+  // private apiUrl = 'https://reembolso-backend.onrender.com/api/';  // URL de tu API en Django Producción
 
   constructor(
     private http: HttpClient,
@@ -28,6 +28,9 @@ export class AuthService {
     this.currentUser = this.currentUserSubject.asObservable();
     this.resetInactivityTimer();
     this.setupActivityListeners();
+
+    // Escuchar cambios en la visibilidad de la página
+    // document.addEventListener('visibilitychange', this.handleVisibilityChange.bind(this));
   }
 
   login(username: string, password: string) {
@@ -146,5 +149,11 @@ export class AuthService {
     window.addEventListener("keypress", () => this.resetInactivityTimer());
     window.addEventListener("scroll", () => this.resetInactivityTimer());
     window.addEventListener("click", () => this.resetInactivityTimer());
+  }
+
+  private handleVisibilityChange(): void {
+    if (document.hidden && this.isLoggedIn()) {
+      this.logout();
+    }
   }
 }

@@ -25,7 +25,6 @@
   justify-content: center;
   gap: 3rem;
   padding: 2rem;
-  // flex-wrap: wrap;
 }
 
 .card-title-paciente {
@@ -46,7 +45,7 @@
   color: #1e88e5;
   font-size: 1.25rem;
   font-weight: bold;
-  margin-bottom: 16px;
+  // margin-bottom: 16px;
   text-align: start;
 }
 
@@ -71,56 +70,62 @@
 }
 
 .center-card {
-  width: 1000px;
-  height: 550px;
-  overflow: hidden; /* Evita que el contenido se desborde */
+  width: 100vw;
+  height: auto;
+  overflow: hidden;
+  margin-bottom: 3rem;
+  width: 100%;
 }
 
 .table-container {
-  overflow-x: auto; /* Permite el desplazamiento horizontal */
-  flex-grow: 1
+  overflow-x: auto;
+  flex-grow: 1;
+  margin-bottom: 3rem !important;
 }
 
 .mat-table {
-  width: 100%; /* La tabla ocupa el 100% del ancho del contenedor */
-  table-layout: fixed; /* Fija el ancho de las celdas */
-  min-width: 600px; /* Ancho mínimo para la tabla */
+  width: 100%;
+  table-layout: fixed;
+  min-width: 600px;
 }
 
 .mat-header-cell,
 .mat-cell {
-  padding: 8px; /* Espaciado interno */
-  text-align: center; /* Centra el contenido */
-  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  padding: 8px;
+  text-align: center;
+  white-space: nowrap;
 }
 
-/* Define un ancho específico para cada columna */
 .mat-column-nroFactura {
-  width: 100px; /* Ancho para la columna Nro. Factura */
+  width: 100px;
 }
 
 .mat-column-nroControl {
-  width: 100px; /* Ancho para la columna Nro. Control */
+  width: 100px;
 }
 
 .mat-column-fechaFactura {
-  width: 120px; /* Ancho para la columna Fecha Factura */
+  width: 120px;
 }
 
 .mat-column-concepto {
-  width: 200px; /* Ancho para la columna Concepto */
+  width: 200px;
 }
 
 .mat-column-monto {
-  width: 100px; /* Ancho para la columna Monto */
+  width: 100px;
 }
 
-.mat-column-comprobante {
-  width: 150px; /* Ancho para la columna Comprobante */
+.mat-column-documentos {
+  width: 200px;
 }
 
-.mat-column-actions {
-  width: 80px; /* Ancho para la columna Acciones */
+.mat-column-estado {
+  width: 120px;
+}
+
+.mat-column-acciones {
+  width: 120px;
 }
 
 .right-card {
@@ -131,19 +136,24 @@
 }
 
 mat-paginator {
-  margin-top: 16px;
-  background-color: #f5f5f5;
+  // margin-top: 16px;
+  background-color: #ffff;
   border-radius: 4px;
-  // margin-top: 350px;
+  justify-content: left !important;
+}
+
+::ng-deep .mat-paginator-container {
+  justify-content: left !important;
+  margin-bottom: 2rem;
 }
 
 .diagnostico-textarea {
-  width: 100%; /* Asegura que el textarea ocupe todo el ancho del contenedor */
-  min-height: 10px; /* Altura mínima para el textarea */
-  max-height: 70px; /* Altura máxima para el textarea */
-  min-width: 100%; /* Ancho mínimo para el textarea */
-  max-width: 100%; /* Ancho máximo para el textarea */
-  resize: vertical; /* Permite el redimensionamiento vertical solamente */
+  width: 100%;
+  min-height: 10px;
+  max-height: 70px;
+  min-width: 100%;
+  max-width: 100%;
+  resize: vertical;
 }
 
 .finiquito-button {
@@ -172,11 +182,11 @@ mat-paginator {
 .search-container {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 16px;
 }
 
 .search-field {
-  width: 200px;
+  width: 200px !important;
+  margin-bottom: -16px !important;
 }
 
 .full-width {
@@ -194,6 +204,8 @@ mat-paginator {
   flex: 1;
 }
 
+
+
 .info p strong {
   display: block;
   color: #1c71bb;
@@ -210,6 +222,68 @@ mat-paginator {
 
 .info .estatus {
   margin-right: 60px;
+}
+
+/* Estilos para el diálogo de agregar factura */
+.mat-dialog-container {
+  padding: 24px;
+  border-radius: 30px;
+}
+
+.mat-stepper-horizontal {
+  background-color: transparent;
+}
+
+.mat-form-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.file-upload-container {
+  margin-bottom: 16px;
+}
+
+.file-upload-container label {
+  display: block;
+  margin-bottom: 8px;
+  color: #1e88e5;
+  font-weight: bold;
+}
+
+.file-upload-container input[type="file"] {
+  display: none;
+}
+
+.file-upload-container mat-form-field {
+  width: 100%;
+}
+
+/* Estilos para el resumen de solicitudes */
+.resumen-solicitudes {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.resumen-solicitudes mat-chip {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.estado-aprobado {
+  background-color: #4caf50;
+  color: white;
+}
+
+.estado-rechazado {
+  background-color: #f44336;
+  color: white;
+}
+
+.estado-revision {
+  background-color: #ff9800;
+  color: white;
 }
 
 @media (max-width: 600px) {
@@ -240,26 +314,32 @@ mat-paginator {
   .right-card {
     display: flex;
     padding: 16px;
-    width: 80%; /* Asegura que las tarjetas ocupen todo el ancho */
+    width: 80%;
   }
 
   .center-card {
-    width: 100%; /* Ocupa todo el ancho disponible */
-    max-width: 1000px; /* Evita que se salga de la pantalla */
-    height: auto; /* Altura automática para adaptarse al contenido */
+    width: 100%;
+    max-width: 1000px;
+    height: auto;
     padding: 8px;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Reduce el padding para ahorrar espacio */
+    overflow: hidden;
   }
 
   .mat-table {
-    min-width: 100%; /* La tabla ocupa todo el ancho disponible */
+    min-width: 100%;
     table-layout: fixed;
   }
 
   .right-card {
     margin-bottom: 5rem;
+  }
+
+  .stepper-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
   }
 
   .download-button {
@@ -276,7 +356,7 @@ mat-paginator {
   }
 
   .search-field {
-    width: 100%; /* Asegura que el campo de búsqueda ocupe todo el ancho en pantallas pequeñas */
+    width: 100%;
   }
 
   .full-width {

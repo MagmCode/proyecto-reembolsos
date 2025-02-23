@@ -44,25 +44,34 @@ import { CsrfInterceptor } from './services/csrf.interceptor';
 
 import { SignInComponent } from './modules/auth/sign-in/sign-in.component';
 import { SignUpComponent } from './modules/auth/sign-up/sign-up.component';
-import { HomePageComponent } from './modules/user/home-page/home-page.component';
+import { HomePageComponent } from './modules/rol/user/home-page/home-page.component';
 import { FooterComponent } from './modules/pages/footer/footer.component';
 import { HeaderComponent } from './modules/pages/header/header.component';
-import { ForgotPasswordComponent } from './modules/user/forgot-password/forgot-password.component';
-import { ReembolsoComponent } from './modules/user/reembolso/reembolso.component';
-import { CartaAvalComponent } from './modules/user/carta-aval/carta-aval.component';
-import { EditProfileComponent } from './modules/user/edit-profile/edit-profile.component';
-import { ChangePasswordComponent } from './modules/user/change-password/change-password.component';
-import { DashboardComponent } from './modules/admin/dashboard/dashboard.component';
-import { HistorialComponent } from './modules/admin/historial/historial.component';
-import { ReembolsoAdminComponent } from './modules/admin/reembolso-admin/reembolso-admin.component';
-import { CartaavalAdminComponent } from './modules/admin/cartaaval-admin/cartaaval-admin.component';
-import { EditProfileAdminComponent } from './modules/admin/edit-profile-admin/edit-profile-admin.component';
-import { ChangePasswordAdminComponent } from './modules/admin/change-password-admin/change-password-admin.component';
-import { AsignProfileComponent } from './modules/admin/asign-profile/asign-profile.component';
+import { ForgotPasswordComponent } from './modules/rol/user/forgot-password/forgot-password.component';
+import { ReembolsoComponent } from './modules/rol/user/reembolso/reembolso.component';
+import { CartaAvalComponent } from './modules/rol/user/carta-aval/carta-aval.component';
+import { EditProfileComponent } from './modules/rol/user/edit-profile/edit-profile.component';
+import { ChangePasswordComponent } from './modules/rol/user/change-password/change-password.component';
+import { DashboardComponent } from './modules/rol/admin/dashboard/dashboard.component';
+import { HistorialComponent } from './modules/rol/admin/historial/historial.component';
+import { ReembolsoAdminComponent } from './modules/rol/admin/reembolso-admin/reembolso-admin.component';
+import { CartaavalAdminComponent } from './modules/rol/admin/cartaaval-admin/cartaaval-admin.component';
+import { EditProfileAdminComponent } from './modules/rol/admin/edit-profile-admin/edit-profile-admin.component';
+import { ChangePasswordAdminComponent } from './modules/rol/admin/change-password-admin/change-password-admin.component';
+import { AsignProfileComponent } from './modules/rol/admin/asign-profile/asign-profile.component';
 import { UnauthorizedComponent } from './modules/pages/unauthorized/unauthorized.component';
-import { ReportesComponent } from './modules/admin/reportes/reportes.component';
-import { DetalleReembolsoComponent } from './modules/admin/detalle-reembolso/detalle-reembolso.component';
-import { DetalleCartaavalComponent } from './modules/admin/detalle-cartaaval/detalle-cartaaval.component';
+import { ReportesComponent } from './modules/rol/admin/reportes/reportes.component';
+import { DetalleReembolsoComponent } from './modules/rol/admin/detalle-reembolso/detalle-reembolso.component';
+import { DetalleCartaavalComponent } from './modules/rol/admin/detalle-cartaaval/detalle-cartaaval.component';
+import { HomepageAnalistComponent } from './modules/rol/analist/homepage-analist/homepage-analist.component';
+import { DetalleCartaavalAnalistComponent } from './modules/rol/analist/detalle-cartaaval-analist/detalle-cartaaval-analist.component';
+import { ChangePasswordAnalistComponent } from './modules/rol/analist/change-password-analist/change-password-analist.component';
+import { CartaavalAnalistComponent } from './modules/rol/analist/cartaaval-analist/cartaaval-analist.component';
+import { ReembolsoAnalistComponent } from './modules/rol/analist/reembolso-analist/reembolso-analist.component';
+import { DetalleReembolsoAnalistComponent } from './modules/rol/analist/detalle-reembolso-analist/detalle-reembolso-analist.component';
+import { EdirProfileAnalistComponent } from './modules/rol/analist/edir-profile-analist/edir-profile-analist.component';
+import { HistorialAnalistComponent } from './modules/rol/analist/historial-analist/historial-analist.component';
+import { ReportesAnalistComponent } from './modules/rol/analist/reportes-analist/reportes-analist.component';
 
 @NgModule({
   declarations: [
@@ -88,6 +97,15 @@ import { DetalleCartaavalComponent } from './modules/admin/detalle-cartaaval/det
     ReportesComponent,
     DetalleReembolsoComponent,
     DetalleCartaavalComponent,
+    HomepageAnalistComponent,
+    DetalleCartaavalAnalistComponent,
+    ChangePasswordAnalistComponent,
+    CartaavalAnalistComponent,
+    ReembolsoAnalistComponent,
+    DetalleReembolsoAnalistComponent,
+    EdirProfileAnalistComponent,
+    HistorialAnalistComponent,
+    ReportesAnalistComponent,
   ],
   imports: [
     BrowserModule,

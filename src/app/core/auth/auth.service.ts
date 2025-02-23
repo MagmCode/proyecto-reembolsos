@@ -16,7 +16,8 @@ export class AuthService {
   public currentUser!: Observable<any>;
 
   // URL de conexión
-  private apiUrl = "http://180.183.66.248:8000/api/"; // URL de tu API en Django local
+  // private apiUrl = "http://180.183.66.248:8000/api/"; // URL de tu API en Django local
+  private apiUrl = "http://127.0.0.1:8000/api/"; // URL de tu API en Django local
   // private apiUrl = 'https://reembolso-backend.onrender.com/api/';  // URL de tu API en Django Producción
 
   constructor(
@@ -28,9 +29,6 @@ export class AuthService {
     this.currentUser = this.currentUserSubject.asObservable();
     this.resetInactivityTimer();
     this.setupActivityListeners();
-
-    // Escuchar cambios en la visibilidad de la página
-    // document.addEventListener('visibilitychange', this.handleVisibilityChange.bind(this));
   }
 
   login(username: string, password: string) {
@@ -39,11 +37,23 @@ export class AuthService {
       tap((response: any) => {
         // Almacenar el token y el rol del usuario
         localStorage.setItem("access_token", response.access);
-        localStorage.setItem("is_admin", response.is_admin);
+        localStorage.setItem("rol", response.rol);  // Almacena el rol del usuario
         localStorage.setItem("username", response.username);
         localStorage.setItem("first_name", response.first_name);
         localStorage.setItem("last_name", response.last_name);
         this.currentUserSubject.next(response); // Actualizar el currentUser
+
+        // Redirigir según el rol
+        const rol = response.rol;
+        if (rol === 'admin') {
+          this.router.navigate(['/admin/dashboard']);
+        } else if (rol === 'analista') {
+          this.router.navigate(['/analista/dashboard']);
+        } else if (rol === 'cliente') {
+          this.router.navigate(['/cliente/dashboard']);
+        } else {
+          this.router.navigate(['/login']); // Redirigir a login si el rol no es válido
+        }
       })
     );
   }
@@ -68,37 +78,18 @@ export class AuthService {
     // Elimina todos los datos del usuario
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
-    localStorage.removeItem("is_admin");
+    localStorage.removeItem("rol");
     localStorage.removeItem("username");
     localStorage.removeItem("first_name");
     localStorage.removeItem("last_name");
-  
     this.currentUserSubject.next(null); // Actualizar el currentUser
-  
+
     // Realiza una solicitud al backend para destruir la sesión en el servidor
     this.http.post<any>(`${this.apiUrl}logout/`, {}).subscribe(() => {
-      this.router.navigate(["/Login"]);
+      this.router.navigate(["/login"]);
     }, (error) => {
       console.error('Error during logout:', error);
-      // Manejar el error si es necesario
     });
-  }
-  
-
-  verifyToken() {
-    const token = this.getToken();
-    if (!token) {
-      return false;
-    }
-
-    return this.http.get(`${this.apiUrl}verify-token/`, {
-      headers: { Authorization: `Bearer ${token}` },
-    }).pipe(
-      catchError(() => {
-        this.logout(); // Si el token no es válido, cierra la sesión
-        return throwError("Token inválido");
-      })
-    );
   }
 
   isLoggedIn(): boolean {
@@ -130,7 +121,20 @@ export class AuthService {
 
   getName(): string {
     const firstName = localStorage.getItem('first_name') || '';
-    return `${firstName}`; // Devuelve el nombre completo
+    return `${firstName}`; // Devuelve el nombre
+  }
+
+  // Métodos para verificar el rol del usuario
+  getRol(): string {
+    return localStorage.getItem("rol") || '';
+  }
+
+  isAnalista(): boolean {
+    return this.getRol() === 'analista';
+  }
+
+  isCliente(): boolean {
+    return this.getRol() === 'cliente';
   }
 
   private resetInactivityTimer() {

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
+import { AuthService } from "src/app/core/auth/auth.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-homepage-analist',
@@ -6,10 +8,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./homepage-analist.component.scss']
 })
 export class HomepageAnalistComponent implements OnInit {
+  constructor(private authService: AuthService, private router: Router) {}
 
-  constructor() { }
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
+  adminCartaAval() {
+    this.router.navigate(["admin/carta-aval"]);
   }
-
+  adminReembolso() {
+    this.router.navigate(["admin/reembolso"]);
+  }
+  historial() {
+    this.router.navigate(["admin/historial"]);
+  }
+  reportes() {
+    this.router.navigate(["admin/reportes"]);
+  }
 }

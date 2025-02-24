@@ -20,7 +20,7 @@ export class AnalistGuard implements CanActivate {
   ): boolean | UrlTree {
     const isAuthenticated: boolean = this.authService.isAuthenticated();
     const isAdmin: boolean = this.authService.isAdmin();
-    if (isAuthenticated && isAdmin) {
+    if (isAuthenticated && !isAdmin) {
       return true;
     } else {
       return this.router.parseUrl('/unauthorized');

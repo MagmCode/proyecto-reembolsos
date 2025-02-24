@@ -50,6 +50,7 @@ export class SignInComponent implements OnInit {
   }
 
   // login.component.ts
+// Método para manejar el envío del formulario de inicio de sesión
 onSubmit() {
   if (this.loginForm.valid) {
     this.isLoading = true;
@@ -60,13 +61,20 @@ onSubmit() {
       (response: any) => {
         this.isLoading = false;
         const token = response.access;
-        const isAdmin = response.is_admin === true;  // Convertir a booleano
-        this.authService.setSession(token, isAdmin);
+        const rol = response.rol;  // Obtener el rol del usuario
 
-        if (isAdmin) {
+        // Guardar el token y el rol en la sesión
+        this.authService.setSession(token, rol === 'admin');
+
+        // Redirigir según el rol del usuario
+        if (rol === 'admin') {
           this.router.navigate(['/admin/dashboard']);
-        } else {
+        } else if (rol === 'analista') {
+          this.router.navigate(['/analist/home-page']);
+        } else if (rol === 'cliente') {
           this.router.navigate(['/user/home-page']);
+        } else {
+          this.router.navigate(['/Login']); // Redirigir a login si el rol no es válido
         }
       },
       (error) => {
@@ -76,6 +84,7 @@ onSubmit() {
     );
   }
 }
+
 
 
 ngAfterViewInit() {

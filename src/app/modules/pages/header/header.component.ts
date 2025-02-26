@@ -66,8 +66,14 @@ export class HeaderComponent {
     }
   }
 
-  // RUTAS
-  // User Menu
+  // #region RUTAS
+  // 
+  // 
+  // 
+  // 
+  //
+  //  
+  //#region User Menu
   editProfile() {
     this.router.navigate(['user/editar-perfil']);
   }
@@ -95,7 +101,42 @@ export class HeaderComponent {
     this.router.navigate(['user/carta-aval']);
   }
 
-// admin
+// #region analist
+  assignProfileAnalist() {
+    this.router.navigate(['admin/asignar-perfil']); // Ruta para asignar perfil (solo admin)
+  }
+
+  homeAnalist() {
+    if (this.sidenavOpen) {
+      this.sidenavOpen = false;
+    }
+    this.router.navigate(['admin/dashboard']); // Ruta para el dashboard (solo admin)
+  }
+
+  historialAnalist() {
+    this.router.navigate(['admin/historial']);
+  }
+  reportesAnalist() {
+    this.router.navigate(['admin/reportes']);
+  }
+
+  adminReembolsoAnalist() {
+    this.router.navigate(['admin/reembolso']);
+  }
+
+  adminCartaAvalAnalist() {
+    this.router.navigate(['admin/carta-aval']);
+  }
+
+  editAdminProfileAnalist() {
+    this.router.navigate(['admin/editar-perfil']);
+  }
+  changePasswordAdminAnalist() {
+    this.router.navigate(['admin/cambiar-password']);
+  }
+
+
+  // #region admin
   assignProfile() {
     this.router.navigate(['admin/asignar-perfil']); // Ruta para asignar perfil (solo admin)
   }

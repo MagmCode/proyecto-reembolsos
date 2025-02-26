@@ -29,9 +29,6 @@ export class AuthService {
     this.currentUser = this.currentUserSubject.asObservable();
     this.resetInactivityTimer();
     this.setupActivityListeners();
-
-    // Escuchar cambios en la visibilidad de la página
-    document.addEventListener('visibilitychange', this.handleVisibilityChange.bind(this));
   }
 
   login(username: string, password: string) {
@@ -81,10 +78,8 @@ export class AuthService {
       this.router.navigate(["/Login"]);
     }, (error) => {
       console.error('Error during logout:', error);
-      // Manejar el error si es necesario
     });
   }
-  
 
   verifyToken() {
     const token = this.getToken();
@@ -134,7 +129,6 @@ export class AuthService {
     return `${firstName}`; // Devuelve el nombre completo
   }
 
-
   getRol(): string {
     return localStorage.getItem("rol") || '';
   }
@@ -152,7 +146,9 @@ export class AuthService {
       clearTimeout(this.inactivityTimer);
       this.inactivityTimer = setTimeout(() => {
         this._ngZone.run(() => {
-          this.logout();
+          if (this.isLoggedIn()) {
+            this.logout();
+          }
         });
       }, this.inactivityDuration);
     });
@@ -163,11 +159,5 @@ export class AuthService {
     window.addEventListener("keypress", () => this.resetInactivityTimer());
     window.addEventListener("scroll", () => this.resetInactivityTimer());
     window.addEventListener("click", () => this.resetInactivityTimer());
-  }
-
-  private handleVisibilityChange(): void {
-    if (document.hidden && this.isLoggedIn()) {
-      this.logout();
-    }
   }
 }

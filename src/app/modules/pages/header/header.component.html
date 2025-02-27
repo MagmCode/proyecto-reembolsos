@@ -3,29 +3,29 @@
   <div class="logo-container">
     <img src="../../../../assets/images/Logo.png" alt="Logo" class="logo-header" />
   </div>
-  <nav class="nav-links">
-    <a (click)="isAdmin ? dashboard() : home()">Inicio</a>
-    <a *ngIf="isAdmin" (click)="historial()">Historial</a>
-    <a *ngIf="isAdmin" (click)="reportes()">Reportes</a>
-    <a (click)="isAdmin ? adminReembolso() : reembolso()">Reembolso</a>
-    <a (click)="isAdmin ? adminCartaAval() : cartaAval()">Carta Aval</a>
+  <nav *ngIf="!isAdmin" class="nav-links">
+    <a (click)="isAnalist ? homeAnalist() : home()">Inicio</a>
+    <a *ngIf="isAnalist" (click)="historialAnalist()">Historial</a>
+    <a *ngIf="isAnalist" (click)="reportesAnalist()">Reportes</a>
+    <a (click)="isAnalist ? reembolsoAnalist() : reembolso()">Reembolso</a>
+    <a (click)="isAnalist ? cartaAvalAnalist() : cartaAval()">Carta Aval</a>
   </nav>
   <div class="user-info" (mouseenter)="showMenu()" (mouseleave)="hideMenu()">
     <mat-icon class="user-icon">person</mat-icon>
     <span class="user-text">
-      {{ isAdmin ? 'Admin' : username }}
+      {{ isAdmin ? 'Admin' : first_name }}
       <mat-icon class="arrow-icon">arrow_drop_down</mat-icon>
     </span>
     <div class="user-menu" *ngIf="menuOpen" (mouseenter)="showMenu()" (mouseleave)="hideMenu()">
-      <a (click)="isAdmin ? editAdminProfile() : editProfile()">
+      <a (click)="isAnalist ? editAdminProfile() : editProfile()">
         Editar Perfil
         <mat-icon class="user-menu-icon">edit</mat-icon>
       </a>
-      <a (click)="isAdmin ? changePasswordAdmin() : changePassword()">
+      <a (click)="isAnalist ? changePasswordAdmin() : changePassword()">
         Cambio de clave
         <mat-icon class="user-menu-icon">password</mat-icon>
       </a>
-      <a *ngIf="isAdmin" (click)="assignProfile()">
+      <a *ngIf="isAnalist" (click)="assignProfile()">
         Asignar Perfil
         <mat-icon class="user-menu-icon">assignment</mat-icon>
       </a>
@@ -43,12 +43,12 @@
   [opened]="sidenavOpen"
   (openedChange)="onSidenavChange($event)"
   >
-  <nav class="nav-links-side">
-    <a (click)="isAdmin ? dashboard() : home()">Inicio</a>
-    <a *ngIf="isAdmin" (click)="historial()">Historial</a>
-    <a *ngIf="isAdmin" (click)="reportes()">Reportes</a>
-    <a (click)="isAdmin ? adminReembolso() : reembolso()">Reembolso</a>
-    <a (click)="isAdmin ? adminCartaAval() : cartaAval()">Carta Aval</a>
+  <nav *ngIf="!isAdmin" class="nav-links-side">
+    <a (click)="isAnalist ? dashboard() : home()">Inicio</a>
+    <a *ngIf="isAnalist" (click)="historial()">Historial</a>
+    <a *ngIf="isAnalist" (click)="reportes()">Reportes</a>
+    <a (click)="isAnalist ? adminReembolso() : reembolso()">Reembolso</a>
+    <a (click)="isAnalist ? adminCartaAval() : cartaAval()">Carta Aval</a>
   </nav>
   </mat-sidenav>
   <mat-sidenav-content   (click)="closeSidenav($event)" class="main-sidenav-content">

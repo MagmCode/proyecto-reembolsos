@@ -12,7 +12,8 @@ export class HeaderComponent {
   menuOpen = false;
   sidenavOpen = false;
   isAdmin = false; // Variable para almacenar si el usuario es admin
-  username = 'Usuario'; // Variable para almacenar el nombre de usuario
+  isAnalist = false; // Variable para almacenar si el usuario es analista
+  first_name = 'Usuario'; // Variable para almacenar el nombre de usuario
 
   constructor(
     private router: Router,
@@ -23,8 +24,8 @@ export class HeaderComponent {
   ngOnInit(): void {
     // Obtener el rol y el nombre de usuario al inicializar el componente
     this.isAdmin = this.authService.isAdmin();
-    // this.username = this.authService.getFullName(); // Obtener el nombre completo
-    this.username = this.authService.getName(); // Obtener el nombre completo
+    // this.first_name = this.authService.getFullName(); // Obtener el nombre completo
+    this.first_name = this.authService.getName(); // Obtener el nombre completo
   }
 
   showMenu() {
@@ -120,11 +121,11 @@ export class HeaderComponent {
     this.router.navigate(['admin/reportes']);
   }
 
-  adminReembolsoAnalist() {
+  reembolsoAnalist() {
     this.router.navigate(['admin/reembolso']);
   }
 
-  adminCartaAvalAnalist() {
+  cartaAvalAnalist() {
     this.router.navigate(['admin/carta-aval']);
   }
 

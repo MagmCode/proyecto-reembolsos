@@ -29,9 +29,16 @@ export class AuthService {
     this.currentUser = this.currentUserSubject.asObservable();
     this.resetInactivityTimer();
     this.setupActivityListeners();
-  }
 
+   
+  }
   login(username: string, password: string) {
+    // Verificar si ya hay una sesión activa para este usuario
+    const activeSessionId = localStorage.getItem("session_id");
+    if (activeSessionId && this.isLoggedIn()) {
+      return throwError("Ya tienes una sesión activa. Cierra la sesión actual para iniciar una nueva.");
+    }
+  
     return this.http.post(`${this.apiUrl}login/`, { username, password }).pipe(
       catchError(this.handleError),
       tap((response: any) => {
@@ -41,9 +48,18 @@ export class AuthService {
         localStorage.setItem("username", response.username);
         localStorage.setItem("first_name", response.first_name);
         localStorage.setItem("last_name", response.last_name);
+  
+        // Generar un identificador único de sesión
+        const sessionId = this.generateSessionId();
+        localStorage.setItem("session_id", sessionId);
+  
         this.currentUserSubject.next(response); // Actualizar el currentUser
       })
     );
+  }
+  
+  private generateSessionId(): string {
+    return 'session_' + Math.random().toString(36).substr(2, 9); // Genera un ID único
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -70,6 +86,7 @@ export class AuthService {
     localStorage.removeItem("username");
     localStorage.removeItem("first_name");
     localStorage.removeItem("last_name");
+    localStorage.removeItem("session_id"); // Limpiar el identificador de sesión
   
     this.currentUserSubject.next(null); // Actualizar el currentUser
   
@@ -160,4 +177,6 @@ export class AuthService {
     window.addEventListener("scroll", () => this.resetInactivityTimer());
     window.addEventListener("click", () => this.resetInactivityTimer());
   }
-}
+
+ 
+  }

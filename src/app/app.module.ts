@@ -38,6 +38,7 @@ import { MatCardModule } from '@angular/material/card';
 import {MatStepperModule} from '@angular/material/stepper';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { CsrfInterceptor } from './services/csrf.interceptor';
+import { MatListModule } from '@angular/material/list';
 
 
 
@@ -144,6 +145,7 @@ import { ReportesAnalistComponent } from './modules/rol/analist/reportes-analist
     MatSidenavModule,
     MatStepperModule,
     MatProgressSpinnerModule,
+    MatListModule
     
     
 

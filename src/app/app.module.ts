@@ -73,6 +73,8 @@ import { DetalleReembolsoAnalistComponent } from './modules/rol/analist/detalle-
 import { EdirProfileAnalistComponent } from './modules/rol/analist/edir-profile-analist/edir-profile-analist.component';
 import { HistorialAnalistComponent } from './modules/rol/analist/historial-analist/historial-analist.component';
 import { ReportesAnalistComponent } from './modules/rol/analist/reportes-analist/reportes-analist.component';
+import { CedulaLengthDirective } from './directives/cedula-length.directive';
+import { TelefonoLengthDirective } from './directives/telefono-length.directive';
 
 @NgModule({
   declarations: [
@@ -107,6 +109,8 @@ import { ReportesAnalistComponent } from './modules/rol/analist/reportes-analist
     EdirProfileAnalistComponent,
     HistorialAnalistComponent,
     ReportesAnalistComponent,
+    CedulaLengthDirective,
+    TelefonoLengthDirective,
   ],
   imports: [
     BrowserModule,

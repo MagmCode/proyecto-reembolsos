@@ -16,9 +16,9 @@ export class AuthService {
   public currentUser!: Observable<any>;
 
   // URL de conexión
-  // private apiUrl = "http://180.183.66.248:8000/api/"; // URL de tu API en Django local
-  //private apiUrl = "http://127.0.0.1:8000/api/"; // URL de tu API en Django local
-  private apiUrl = 'https://reembolso-backend.onrender.com/api/';  // URL de tu API en Django Producción
+  private apiUrl = "http://180.183.66.248:8000/api/"; // URL de tu API en Django local
+  // private apiUrl = "http://127.0.0.1:8000/api/"; // URL de tu API en Django local
+  // private apiUrl = 'https://reembolso-backend.onrender.com/api/';  // URL de tu API en Django Producción
 
   constructor(
     private http: HttpClient,
@@ -76,6 +76,12 @@ export class AuthService {
   setSession(token: string, isAdmin: boolean): void {
     localStorage.setItem(this.tokenKey, token);
     localStorage.setItem('is_admin', JSON.stringify(isAdmin));
+  }
+
+  register(userData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}register/`, userData).pipe(
+      catchError(this.handleError) 
+    );
   }
 
   logout() {

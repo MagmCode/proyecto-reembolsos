@@ -24,7 +24,7 @@
   display: flex;
   justify-content: center;
   gap: 3rem;
-  padding: 2rem;
+  padding: 2rem 6rem;
 }
 
 .card-title-paciente {
@@ -63,10 +63,10 @@
 }
 
 .left-card {
-  width: 17rem;
+  width: 20rem;
   align-items: center;
   justify-content: center;
-  height: 400px;
+  height: 300px;
 }
 
 .center-card {
@@ -86,7 +86,7 @@
 .mat-table {
   width: 100%;
   table-layout: fixed;
-  min-width: 600px;
+  min-width: 1000px; /* Ajusta este valor según sea necesario */
 }
 
 .mat-header-cell,
@@ -94,38 +94,40 @@
   padding: 8px;
   text-align: center;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.mat-column-nroFactura {
-  width: 100px;
+.mat-column-id {
+  width: 100px; /* Ancho para el número de factura (id) */
 }
 
 .mat-column-nroControl {
-  width: 100px;
+  width: 100px; /* Ancho para el número de control */
 }
 
 .mat-column-fechaFactura {
-  width: 120px;
+  width: 120px; /* Ancho para la fecha de la factura */
 }
 
 .mat-column-concepto {
-  width: 200px;
+  width: 200px; /* Ancho para el concepto */
 }
 
 .mat-column-monto {
-  width: 100px;
+  width: 100px; /* Ancho para el monto */
 }
 
 .mat-column-documentos {
-  width: 200px;
+  width: 200px; /* Ancho para los documentos */
 }
 
 .mat-column-estado {
-  width: 120px;
+  width: 120px; /* Ancho para el estado */
 }
 
 .mat-column-acciones {
-  width: 120px;
+  width: 120px; /* Ancho para las acciones */
 }
 
 .right-card {
@@ -134,7 +136,6 @@
   justify-content: center;
   color: #757575;
 }
-
 mat-paginator {
   // margin-top: 16px;
   background-color: #ffff;
@@ -261,9 +262,10 @@ mat-paginator {
 /* Estilos para el resumen de solicitudes */
 .resumen-solicitudes {
   display: flex;
-  justify-content: center;
+  justify-content: right;
   gap: 16px;
   margin-bottom: 24px;
+  margin-right: 10rem;
 }
 
 .resumen-solicitudes mat-chip {

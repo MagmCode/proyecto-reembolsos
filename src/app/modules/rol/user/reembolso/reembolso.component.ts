@@ -4,16 +4,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-interface Factura {
-  nroFactura: string;
-  nroControl: string;
-  fechaFactura: Date;
-  concepto: string;
-  monto: number;
-  documentos: { nombre: string; url: string }[];
-  estado: string;
-}
+import { AuthService } from 'src/app/core/auth/auth.service';
+import { Reembolso, Documento } from 'src/app/models/reembolso.model';
+import { AseguradoraService } from 'src/app/services/aseguradora.service';
 
 @Component({
   selector: 'app-reembolso',
@@ -21,27 +14,59 @@ interface Factura {
   styleUrls: ['./reembolso.component.scss']
 })
 export class ReembolsoComponent implements OnInit {
-  displayedColumns: string[] = ['nroFactura', 'nroControl', 'fechaFactura', 'concepto', 'monto', 'documentos', 'estado', 'acciones'];
-  facturaDataSource = new MatTableDataSource<Factura>([]);
+  facturaDataSource = new MatTableDataSource<Reembolso>();
+  displayedColumns: string[] = [
+    'id',
+    'nroControl',
+    'fechaFactura',
+    'concepto',
+    'monto',
+    'documentos',
+    'estado',
+    'acciones'
+  ];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild('addFacturaDialog') addFacturaDialog!: TemplateRef<any>;
 
   firstFormGroup!: FormGroup;
   secondFormGroup!: FormGroup;
-
+  usuario!: any;
   selectedFiles: { [key: string]: File } = {};
+  aseguradoras: any[] = [];
 
   constructor(
     private _formBuilder: FormBuilder,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService: AuthService,
+    private aseguradoraService: AseguradoraService
   ) {}
 
   ngOnInit(): void {
-    // Inicializa los formularios
+    // Cargar la lista de aseguradoras desde el backend
+    this.aseguradoraService.getAseguradoras().subscribe(
+      (data) => {
+        this.aseguradoras = data;
+      },
+      (error) => {
+        console.error('Error al obtener las aseguradoras:', error);
+      }
+    );
+
+    // Inicializar el objeto usuario – asegurándose de tener el id numérico de la aseguradora
+    this.usuario = {
+      nombreCompleto: this.authService.getFullName(),
+      tipoCedula: this.authService.getTipoCedula(),
+      cedula: this.authService.getUsername(),
+      telefono: this.authService.getTelefono(),
+      aseguradora: Number(this.authService.getAseguradora()),
+      nroPoliza: this.authService.getNroPoliza()
+    };
+
+    // Inicializar los formularios
     this.firstFormGroup = this._formBuilder.group({
-      nroFactura: ['', Validators.required],
+      id: ['', Validators.required],
       nroControl: ['', Validators.required],
       fechaFactura: ['', Validators.required],
       concepto: ['', Validators.required],
@@ -54,19 +79,12 @@ export class ReembolsoComponent implements OnInit {
       docIdentificacion: ['']
     });
 
-    // Carga datos de ejemplo
-    this.facturaDataSource.data = this.getDatosDeEjemplo();
+    // Cargar los reembolsos existentes desde el backend
+    this.loadReembolsos();
   }
 
   ngAfterViewInit(): void {
     this.facturaDataSource.paginator = this.paginator;
-  }
-
-  formatDate(date: Date): string {
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
   }
 
   addRow(): void {
@@ -91,39 +109,125 @@ export class ReembolsoComponent implements OnInit {
       this.mostrarNotificacion('Por favor, complete todos los campos requeridos.');
       return;
     }
-
+  
+    // Validación: Asegurar que se hayan subido los tres documentos
+    if (
+      !this.selectedFiles['informe_ampliado'] ||
+      !this.selectedFiles['informe_resultado'] ||
+      !this.selectedFiles['docIdentificacion']
+    ) {
+      if (!this.selectedFiles['informe_ampliado']) {
+        this.secondFormGroup.get('informeAmplio')?.markAsTouched();
+      }
+      if (!this.selectedFiles['informe_resultado']) {
+        this.secondFormGroup.get('informeEstudio')?.markAsTouched();
+      }
+      if (!this.selectedFiles['docIdentificacion']) {
+        this.secondFormGroup.get('docIdentificacion')?.markAsTouched();
+      }
+      this.mostrarNotificacion('Debe cargar los tres documentos requeridos.');
+      return;
+    }
+  
     const facturaData = this.firstFormGroup.value;
-    const documentos = Object.keys(this.selectedFiles).map(key => ({
-      nombre: this.selectedFiles[key].name,
-      url: URL.createObjectURL(this.selectedFiles[key])
-    }));
+    const formData = new FormData();
+  
+    // Convertir "fechaFactura" al formato esperado y asignarla al campo "fecha_factura"
+    if (facturaData.fechaFactura) {
+      facturaData.fecha_factura = this.formatDate(new Date(facturaData.fechaFactura));
+      delete facturaData.fechaFactura; // Para evitar duplicados
+    }
+  
+    // Agregar los demás campos del formulario al FormData
+    Object.keys(facturaData).forEach(key => {
+      formData.append(key, facturaData[key]);
+    });
+  
+    // Agregar de forma explícita los archivos, mapeando la clave "docIdentificacion" a "cedula_paciente"
+    if (this.selectedFiles['informe_ampliado']) {
+      formData.append('informe_ampliado', this.selectedFiles['informe_ampliado']);
+    }
+    if (this.selectedFiles['informe_resultado']) {
+      formData.append('informe_resultado', this.selectedFiles['informe_resultado']);
+    }
+    if (this.selectedFiles['docIdentificacion']) {
+      formData.append('cedula_paciente', this.selectedFiles['docIdentificacion']);
+    }
+  
+    // Campos adicionales requeridos por el backend
+    formData.append('username', this.usuario.cedula);
+    formData.append('aseguradora', this.usuario.aseguradora.toString());
+    formData.append('estado', 'En revisión');
+  
+    // Enviar la solicitud al backend
+    this.authService.addReembolso(formData).subscribe(
+      (data: any) => {
+        const nuevoReembolso: Reembolso = {
+          id: data.id,
+          nroControl: data.nroControl || facturaData.nroControl,
+          fechaFactura: data.fecha_factura,
+          concepto: data.concepto,
+          monto: data.monto,
+          estado: data.estado || 'En revisión',
+          username: data.username,
+          documentos: this.construirDocumentos(data)
+        };
+  
+        this.facturaDataSource.data = [...this.facturaDataSource.data, nuevoReembolso];
+        this.dialog.closeAll();
+        this.firstFormGroup.reset();
+        this.secondFormGroup.reset();
+        this.selectedFiles = {};
+        this.mostrarNotificacion('Solicitud agregada correctamente.');
+      },
+      (error) => {
+        console.error('Error al agregar el reembolso', error);
+        this.mostrarNotificacion('Error al agregar la solicitud.');
+      }
+    );
+  }
+  
 
-    const nuevaFactura: Factura = {
-      ...facturaData,
-      documentos,
-      estado: 'En revisión'
-    };
+  // Función para construir el arreglo de Documentos usando los campos de archivos retornados por el backend
+  private construirDocumentos(data: any): Documento[] {
+    const docs: Documento[] = [];
+    if (data.informe_ampliado) {
+      docs.push({ nombre: 'Informe Amplio', url: data.informe_ampliado });
+    }
+    if (data.informe_resultado) {
+      docs.push({ nombre: 'Informe y Resultados de Estudio', url: data.informe_resultado });
+    }
+    if (data.cedula_paciente) {
+      docs.push({ nombre: 'Documento de Identificación', url: data.cedula_paciente });
+    }
+    return docs;
+  }
 
-    this.facturaDataSource.data = [...this.facturaDataSource.data, nuevaFactura];
-    this.dialog.closeAll();
-    this.firstFormGroup.reset();
-    this.secondFormGroup.reset();
-    this.selectedFiles = {};
-    this.mostrarNotificacion('Solicitud agregada correctamente.');
+  // Función para formatear una fecha a formato YYYY-MM-DD
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   getFileName(field: string): string {
-    const file = this.selectedFiles[field];
-    return file ? file.name : '';
+    return this.selectedFiles[field] ? this.selectedFiles[field].name : '';
   }
 
-  deleteRow(element: Factura): void {
+  // Función para obtener el nombre de la aseguradora a partir de su id
+  getAseguradora(id: number): string {
+    const found = this.aseguradoras.find(a => a.id === id);
+    return found ? found.nombre : 'Sin Aseguradora';
+  }
+
+  deleteRow(element: Reembolso): void {
     this.facturaDataSource.data = this.facturaDataSource.data.filter(e => e !== element);
     this.mostrarNotificacion('Solicitud eliminada.');
   }
 
-  descargarDocumentos(element: Factura): void {
-    element.documentos.forEach(doc => {
+  descargarDocumentos(element: Reembolso): void {
+    element.documentos.forEach((doc: Documento) => {
       const link = document.createElement('a');
       link.href = doc.url;
       link.download = doc.nombre;
@@ -131,8 +235,8 @@ export class ReembolsoComponent implements OnInit {
     });
   }
 
-  verDetalles(element: Factura): void {
-    console.log('Detalles de la factura:', element);
+  verDetalles(element: Reembolso): void {
+    console.log('Detalles del reembolso:', element);
   }
 
   applyFilter(event: Event): void {
@@ -142,10 +246,14 @@ export class ReembolsoComponent implements OnInit {
 
   getEstadoClass(estado: string): string {
     switch (estado) {
-      case 'Aprobado': return 'estado-aprobado';
-      case 'Rechazado': return 'estado-rechazado';
-      case 'En revisión': return 'estado-revision';
-      default: return '';
+      case 'Aprobado':
+        return 'estado-aprobado';
+      case 'Rechazado':
+        return 'estado-rechazado';
+      case 'En revisión':
+        return 'estado-revision';
+      default:
+        return '';
     }
   }
 
@@ -171,31 +279,32 @@ export class ReembolsoComponent implements OnInit {
     });
   }
 
-  getDatosDeEjemplo(): Factura[] {
-    return [
-      {
-        nroFactura: '001',
-        nroControl: 'A1',
-        fechaFactura: new Date('2023-10-01'),
-        concepto: 'Consulta',
-        monto: 100,
-        documentos: [
-          { nombre: 'InformeAmplio.pdf', url: 'ruta/al/archivo' },
-          { nombre: 'Identificacion.jpg', url: 'ruta/al/archivo' }
-        ],
-        estado: 'Aprobado'
+  loadReembolsos(): void {
+    this.authService.getReembolsos().subscribe(
+      (data: any[]) => {
+        this.facturaDataSource.data = data.map(item => {
+          // Para cada item, asignamos defaults en caso de que falte "nroControl" o "estado"
+          const reembolso: Reembolso = {
+            id: item.id,
+            nroControl: item.nroControl || '---',
+            fechaFactura: item.fecha_factura,
+            concepto: item.concepto,
+            monto: item.monto,
+            estado: item.estado || 'En revisión',
+            username: item.username,
+            documentos: [
+              { nombre: 'Informe Amplio', url: item.informe_ampliado },
+              { nombre: 'Informe y Resultados de Estudio', url: item.informe_resultado },
+              { nombre: 'Documento de Identificación', url: item.cedula_paciente }
+            ]
+          };
+          return reembolso;
+        });
       },
-      {
-        nroFactura: '002',
-        nroControl: 'A2',
-        fechaFactura: new Date('2023-10-02'),
-        concepto: 'Examen',
-        monto: 200,
-        documentos: [
-          { nombre: 'InformeEstudio.pdf', url: 'ruta/al/archivo' }
-        ],
-        estado: 'En revisión'
+      (error) => {
+        console.error('Error al cargar los reembolsos', error);
+        this.mostrarNotificacion('Error al cargar las solicitudes.');
       }
-    ];
+    );
   }
 }

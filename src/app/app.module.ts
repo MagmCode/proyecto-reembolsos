@@ -77,6 +77,7 @@ import { CedulaLengthDirective } from './directives/cedula-length.directive';
 import { TelefonoLengthDirective } from './directives/telefono-length.directive';
 import { MaxLengthDirective } from './directives/max-length.directive';
 
+
 @NgModule({
   declarations: [
     AppComponent,

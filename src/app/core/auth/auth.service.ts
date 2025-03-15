@@ -1,8 +1,10 @@
 import { Injectable, NgZone } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { catchError, tap } from "rxjs/operators";
 import { BehaviorSubject, Observable, throwError } from "rxjs";
+import { Reembolso } from 'src/app//models/reembolso.model';
+
 
 @Injectable({
   providedIn: "root",
@@ -33,25 +35,19 @@ export class AuthService {
    
   }
   login(username: string, password: string) {
-    // Verificar si ya hay una sesión activa para este usuario
-    const activeSessionId = localStorage.getItem("session_id");
-    if (activeSessionId && this.isLoggedIn()) {
-      return throwError("Ya tienes una sesión activa. Cierra la sesión actual para iniciar una nueva.");
-    }
-  
     return this.http.post(`${this.apiUrl}login/`, { username, password }).pipe(
       catchError(this.handleError),
       tap((response: any) => {
-        // Almacenar el token y el rol del usuario
+        // Almacenar el token y los datos del usuario
         localStorage.setItem("access_token", response.access);
         localStorage.setItem("is_admin", response.is_admin);
         localStorage.setItem("username", response.username);
         localStorage.setItem("first_name", response.first_name);
         localStorage.setItem("last_name", response.last_name);
-  
-        // Generar un identificador único de sesión
-        const sessionId = this.generateSessionId();
-        localStorage.setItem("session_id", sessionId);
+        localStorage.setItem("tipoCedula", response.tipo_cedula); // Almacenar el tipo de cédula
+        localStorage.setItem("telefono", response.telefono); // Almacenar el teléfono
+        localStorage.setItem("aseguradora", response.aseguradora); // Almacenar la aseguradora
+        localStorage.setItem("nroPoliza", response.nroPoliza); // Almacenar el número de póliza
   
         this.currentUserSubject.next(response); // Actualizar el currentUser
       })
@@ -164,6 +160,51 @@ export class AuthService {
     return this.getRol() === 'cliente';
   }
 
+   // Método para obtener el teléfono del usuario
+   getTelefono(): string {
+    return localStorage.getItem("telefono") || "No disponible";
+  }
+
+  // Método para obtener la aseguradora del usuario
+  getAseguradora(): string {
+    return localStorage.getItem("aseguradora") || "No disponible";
+  }
+
+  // Método para obtener el número de póliza del usuario
+  getNroPoliza(): string {
+    return localStorage.getItem("nroPoliza") || "No disponible";
+  }
+
+  // Método para obtener el tipo de cédula del usuario
+  getTipoCedula(): string {
+    return localStorage.getItem("tipoCedula") || "V"; // Valor por defecto: 'V' (Venezolano)
+  }
+
+  // Método para obtener los datos del perfil del usuario
+getUserProfile(): Observable<any> {
+  const token = this.getToken();
+  return this.http.get(`${this.apiUrl}user-profile/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  }).pipe(
+    catchError(this.handleError)
+  );
+}
+
+updateUserData(updatedData: any): void {
+  this.currentUserSubject.next(updatedData); // Actualizar el BehaviorSubject
+}
+
+// Método para actualizar los datos del perfil del usuario
+updateUserProfile(userData: any): Observable<any> {
+  const token = this.getToken();
+  return this.http.put(`${this.apiUrl}user-profile/`, userData, {
+    headers: { Authorization: `Bearer ${token}` },
+  }).pipe(
+    catchError(this.handleError)
+  );
+}
+
+
   private resetInactivityTimer() {
     this._ngZone.runOutsideAngular(() => {
       clearTimeout(this.inactivityTimer);
@@ -183,6 +224,42 @@ export class AuthService {
     window.addEventListener("scroll", () => this.resetInactivityTimer());
     window.addEventListener("click", () => this.resetInactivityTimer());
   }
+
+
+
+
+
+
+
+
+
+  // Método para obtener los reembolsos del usuario actual
+  getReembolsos(): Observable<Reembolso[]> {
+    const token = this.getToken();
+    return this.http.get<Reembolso[]>(`${this.apiUrl}reembolsos/`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
+
+  // Método para agregar un nuevo reembolso
+  addReembolso(reembolso: FormData): Observable<Reembolso> {
+    const token = this.getToken(); // Obtén el token del localStorage
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}` // Incluye el token en el encabezado
+    });
+  
+    return this.http.post<Reembolso>(`${this.apiUrl}reembolsos/`, reembolso, { headers });
+  }
+  
+
+  // Método para subir archivos (comprobantes de factura)
+  uploadFiles(files: FormData): Observable<any> {
+    const token = this.getToken();
+    return this.http.post(`${this.apiUrl}upload-files/`, files, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
+
 
  
   }

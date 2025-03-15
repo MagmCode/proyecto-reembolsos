@@ -257,13 +257,16 @@
           <label for="aseguradora">Aseguradora</label>
           <mat-form-field appearance="outline">
             <mat-select id="aseguradora" formControlName="aseguradora" required>
-              <mat-option *ngFor="let aseguradora of aseguradoras" [value]="aseguradora.nombre">
+              <mat-option *ngFor="let aseguradora of aseguradoras" [value]="aseguradora.id">
                 {{ aseguradora.nombre }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="aseguradora.invalid">Por favor seleccione una aseguradora</mat-error>
+            <mat-error *ngIf="signUpForm.controls.aseguradora.invalid">
+              Por favor seleccione una aseguradora
+            </mat-error>
           </mat-form-field>
         </div>
+        
 
         <!-- Campo: Nro. de Póliza -->
         <div class="form-field">

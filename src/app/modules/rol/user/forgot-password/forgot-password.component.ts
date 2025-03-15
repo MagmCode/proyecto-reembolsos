@@ -125,9 +125,6 @@ export class ForgotPasswordComponent implements OnInit {
     if (newPassword?.value !== confirmPassword?.value) {
       newPassword?.setErrors({ passwordMismatch: true });
       confirmPassword?.setErrors({ passwordMismatch: true });
-      // this._snackBar.open("Las contraseñas no coinciden", "Cerrar", {
-      //   duration: 3000,
-      // });
       return; // Detiene la ejecución si las contraseñas no coinciden
     }
   
@@ -147,21 +144,38 @@ export class ForgotPasswordComponent implements OnInit {
             });
             this.router.navigate(["/Login"]);
           } else {
-            this._snackBar.open("Error al actualizar la contraseña", "Cerrar", {
-              duration: 3000,
-            });
+            // Manejar errores específicos del backend
+            if (response.error === 'La nueva contraseña no puede ser igual a la actual') {
+              this._snackBar.open("La nueva contraseña no puede ser igual a la actual", "Cerrar", {
+                duration: 3000,
+              });
+            } else {
+              this._snackBar.open("Error al actualizar la contraseña", "Cerrar", {
+                duration: 3000,
+              });
+            }
           }
         },
         (error) => {
+          this.isLoading = false;
           console.error('Error en la solicitud:', error);
-          this._snackBar.open("Error en el servidor", "Cerrar", {
-            duration: 3000,
-          });
+          if (error.status === 400 && error.error.error === 'La nueva contraseña no puede ser igual a la actual') {
+            // Mostrar snack bar si la nueva contraseña es igual a la actual
+            this._snackBar.open("La nueva contraseña no puede ser igual a la actual", "Cerrar", {
+              duration: 3000,
+            });
+          } else {
+            // Mostrar error genérico solo si no es el error específico
+            this._snackBar.open("Error en el servidor", "Cerrar", {
+              duration: 3000,
+            });
+          }
         }
       );
     } else {
       this.passwordForm.markAllAsTouched();
     }
+  
   }
 
   validateEmail(email: string | null): boolean {

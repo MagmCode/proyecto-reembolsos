@@ -75,6 +75,7 @@ import { HistorialAnalistComponent } from './modules/rol/analist/historial-anali
 import { ReportesAnalistComponent } from './modules/rol/analist/reportes-analist/reportes-analist.component';
 import { CedulaLengthDirective } from './directives/cedula-length.directive';
 import { TelefonoLengthDirective } from './directives/telefono-length.directive';
+import { MaxLengthDirective } from './directives/max-length.directive';
 
 @NgModule({
   declarations: [
@@ -111,6 +112,7 @@ import { TelefonoLengthDirective } from './directives/telefono-length.directive'
     ReportesAnalistComponent,
     CedulaLengthDirective,
     TelefonoLengthDirective,
+    MaxLengthDirective,
   ],
   imports: [
     BrowserModule,

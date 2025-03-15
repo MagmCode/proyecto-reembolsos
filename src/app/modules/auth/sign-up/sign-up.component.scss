@@ -100,11 +100,25 @@ label {
   display: flex;
   justify-content: center;
   margin-bottom: 1rem;
+
   button {
     color: white;
     width: 300px;
     height: 45px;
     border-radius: 20px;
+    display: flex; // Añade flexbox al botón
+    align-items: center; // Centra verticalmente
+    justify-content: center; // Centra horizontalmente
+  }
+
+  .white-spinner {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  ::ng-deep .white-spinner .mat-progress-spinner circle,
+  ::ng-deep .white-spinner .mat-spinner circle {
+    stroke: white !important;
   }
 }
 

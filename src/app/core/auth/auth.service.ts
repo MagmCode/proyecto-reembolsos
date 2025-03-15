@@ -16,8 +16,8 @@ export class AuthService {
   public currentUser!: Observable<any>;
 
   // URL de conexión
-  private apiUrl = "http://180.183.66.248:8000/api/"; // URL de tu API en Django local
-  // private apiUrl = "http://127.0.0.1:8000/api/"; // URL de tu API en Django local
+  // private apiUrl = "http://180.183.66.248:8000/api/"; // URL de tu API en Django local
+  private apiUrl = "http://127.0.0.1:8000/api/"; // URL de tu API en Django local
   // private apiUrl = 'https://reembolso-backend.onrender.com/api/';  // URL de tu API en Django Producción
 
   constructor(

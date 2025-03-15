@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, FormControl, ValidatorFn, AbstractC
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { AseguradoraService } from 'src/app/services/aseguradora.service';
 
 // Función de validación personalizada para contraseñas iguales
 export const passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
@@ -47,6 +48,7 @@ export class SignUpComponent implements OnInit {
   signUpForm!: FormGroup;
   hide = true;
   hide2 = true;
+  isLoading = false;
 
   // Controles de formulario
   nombre!: FormControl;
@@ -66,21 +68,25 @@ export class SignUpComponent implements OnInit {
 
   @ViewChildren('inputField') inputFields!: QueryList<any>;
 
+  aseguradoras: any[] = [];
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
     private snackBar: MatSnackBar,
+    private aseguradoraService: AseguradoraService,
   ) { }
 
   ngOnInit(): void {
+    // Inicializa el formulario
     this.signUpForm = this.fb.group(
       {
         nombre: ['', Validators.required],
         apellido: ['', Validators.required],
-        cedula: ['', Validators.required], 
+        cedula: ['', Validators.required],
         tipoCedula: ['V', Validators.required],
-        fechaNacimiento: ['', [Validators.required, mayorDeEdadValidator]], 
+        fechaNacimiento: ['', [Validators.required, mayorDeEdadValidator]],
         telefono: ['', Validators.required],
         telefonoOpcional: [''],
         correo: ['', [Validators.required, Validators.email]],
@@ -93,6 +99,17 @@ export class SignUpComponent implements OnInit {
       },
       { validators: [passwordMatchValidator] } // Aplica solo la validación de contraseñas
     );
+  
+    // Obtiene las aseguradoras desde la API
+    this.aseguradoraService.getAseguradoras().subscribe(
+      (data) => {
+        this.aseguradoras = data; // Asigna las aseguradoras obtenidas desde la API
+      },
+      (error) => {
+        console.error('Error al obtener las aseguradoras:', error);
+      }
+    );
+  
 
     // Inicializa los controles del formulario
     this.nombre = this.signUpForm.get('nombre') as FormControl;
@@ -204,26 +221,39 @@ export class SignUpComponent implements OnInit {
     }
   
     if (this.signUpForm.valid) {
-      // Combina el tipo de cédula (V o E) con el número de cédula
-      const tipoCedula = this.signUpForm.get('tipoCedula')?.value;
-      const cedula = this.signUpForm.get('cedula')?.value;
-      const cedulaCompleta = `${tipoCedula}-${cedula}`;
+      // Formatea las fechas a YYYY-MM-DD
+      const fechaNacimiento = this.formatDate(this.signUpForm.get('fechaNacimiento')?.value);
+      const vigenteDesde = this.formatDate(this.signUpForm.get('vigenteDesde')?.value);
+      const vigenteHasta = this.formatDate(this.signUpForm.get('vigenteHasta')?.value);
   
-      // Crea el objeto userData con la cédula completa
+      // Convierte telefonoOpcional a null si está vacío
+      const telefonoOpcional = this.signUpForm.get('telefonoOpcional')?.value;
+      const telefonoOpcionalFormateado = telefonoOpcional === '' ? null : telefonoOpcional;
+  
+      // Crea el objeto userData con los datos formateados
       const userData = {
         ...this.signUpForm.value,
-        cedula: cedulaCompleta, // Sobrescribe el valor de la cédula
+        cedula: this.signUpForm.get('cedula')?.value, // Solo el número de cédula
+        tipoCedula: this.signUpForm.get('tipoCedula')?.value, // Envía el tipo de cédula por separado
+        fechaNacimiento: fechaNacimiento, // Fecha formateada
+        vigenteDesde: vigenteDesde, // Fecha formateada
+        vigenteHasta: vigenteHasta, // Fecha formateada
+        telefonoOpcional: telefonoOpcionalFormateado, // null si está vacío
       };
-  
+
+      this.isLoading = true; 
+
+
       // Envía los datos al backend
       this.authService.register(userData).subscribe(
         (response) => {
+          this.isLoading = false;
           console.log('Usuario registrado:', response);
           this.signUpForm.reset();
   
           // Muestra un mensaje de éxito
-          this.snackBar.open('¡Registro exitoso! Serás redirigido al login.', 'Cerrar', {
-            duration: 3000,
+          this.snackBar.open('¡Registro exitoso!', 'Cerrar', {
+            duration: 5000,
             horizontalPosition: 'center',
             verticalPosition: 'top',
           });
@@ -231,12 +261,12 @@ export class SignUpComponent implements OnInit {
           // Redirige al login después de 3 segundos
           setTimeout(() => {
             this.router.navigate(['Login']);
-          }, 3000);
+          }, 0);
         },
         (error) => {
           console.error('Error al registrar usuario:', error);
           this.snackBar.open('Error al registrar usuario. Verifica los datos e intenta nuevamente.', 'Cerrar', {
-            duration: 5000,
+            duration: 3000,
             horizontalPosition: 'center',
             verticalPosition: 'top',
             panelClass: ['error-snackbar'],
@@ -247,6 +277,15 @@ export class SignUpComponent implements OnInit {
       console.log('Formulario inválido. Errores:', this.signUpForm.errors);
     }
   }
+  
+  // Función para formatear fechas a YYYY-MM-DD
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Meses van de 0 a 11
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
 
   ngAfterViewInit() {
     this.inputFields.forEach(input => {

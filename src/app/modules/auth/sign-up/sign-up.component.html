@@ -6,7 +6,7 @@
       >
       <h2>Formulario de Registro</h2>
     </div>
-    <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" autocomplete="off">
+    <form [formGroup]="signUpForm"  autocomplete="off">
       <div class="form-grid">
         <!-- Campo: Nombre -->
         <div class="form-field">
@@ -256,16 +256,12 @@
         <div class="form-field">
           <label for="aseguradora">Aseguradora</label>
           <mat-form-field appearance="outline">
-            <input
-              matInput
-              id="aseguradora"
-              formControlName="aseguradora"
-              required
-              #inputField
-            />
-            <mat-error *ngIf="aseguradora.invalid"
-              >Por favor ingrese su aseguradora</mat-error
-            >
+            <mat-select id="aseguradora" formControlName="aseguradora" required>
+              <mat-option *ngFor="let aseguradora of aseguradoras" [value]="aseguradora.nombre">
+                {{ aseguradora.nombre }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="aseguradora.invalid">Por favor seleccione una aseguradora</mat-error>
           </mat-form-field>
         </div>
 
@@ -373,11 +369,24 @@
       </div>
 
       <!-- Botón de Registro (sin disabled) -->
-      <div class="register-button">
-        <button mat-raised-button color="primary" type="submit">
-          Registrar
-        </button>
-      </div>
+       <div class="register-button">
+      <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      (click)="onSubmit()"
+      [disabled]="isLoading || signUpForm.invalid"
+    >
+      <ng-container *ngIf="!isLoading"> Registrar </ng-container>
+      <ng-container *ngIf="isLoading">
+        <mat-progress-spinner
+          [diameter]="24"
+          mode="indeterminate"
+          class="white-spinner"
+        ></mat-progress-spinner>
+      </ng-container>
+    </button>
+  </div>
     </form>
   </div>
 </div>

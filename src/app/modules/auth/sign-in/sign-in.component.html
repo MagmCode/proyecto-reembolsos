@@ -7,13 +7,11 @@
       />
     </div>
     <form [formGroup]="loginForm" class="form-container" autocomplete="off">
+      <!-- Campo: Usuario (cédula) -->
       <label for="username">Usuario (cédula)</label>
       <div class="input-container">
         <mat-icon class="input-icon">person</mat-icon>
-        <mat-form-field
-          appearance="outline"
-          class="full-width mat-form-field-appearance-outline"
-        >
+        <mat-form-field appearance="outline" class="full-width mat-form-field-appearance-outline">
           <input
             matInput
             type="number"
@@ -22,22 +20,22 @@
             appMaxLength
             #inputField
           />
-          <mat-error *ngIf="username.invalid">{{
-            getErrorMessage()
-          }}</mat-error>
+          <!-- Mensaje de error para el campo de usuario -->
+          <mat-error *ngIf="username.invalid">
+            {{ getErrorMessage('username') }}
+          </mat-error>
         </mat-form-field>
       </div>
+
+      <!-- Campo: Contraseña -->
       <label for="password">Contraseña</label>
       <div class="input-container">
         <mat-icon class="input-icon">lock</mat-icon>
-        <mat-form-field
-          appearance="outline"
-          class="full-width mat-form-field-appearance-outline"
-        >
+        <mat-form-field appearance="outline" class="full-width mat-form-field-appearance-outline">
           <input
             matInput
             [type]="hide ? 'password' : 'text'"
-            [formControlName]="'password'"
+            formControlName="password"
             id="password"
             #passwordField
             #inputField
@@ -50,20 +48,24 @@
           >
             <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
           </button>
-          <mat-error *ngIf="username.invalid">{{
-            getErrorMessage()
-          }}</mat-error>
+          <!-- Mensaje de error para el campo de contraseña -->
+          <mat-error *ngIf="password.invalid">
+            {{ getErrorMessage('password') }}
+          </mat-error>
         </mat-form-field>
       </div>
+
+      <!-- Enlace: ¿Olvidó su contraseña? -->
       <div class="forgot-password">
         <a (click)="forgotPassword()">¿Olvidó su Contraseña?</a>
       </div>
+
+      <!-- Botón: Ingresar -->
       <div class="login-button">
         <button
           mat-raised-button
           color="primary"
           (click)="onSubmit()"
-          [disabled]="isLoading || loginForm.invalid"
         >
           <ng-container *ngIf="!isLoading"> Ingresar </ng-container>
           <ng-container *ngIf="isLoading">
@@ -72,12 +74,12 @@
               mode="indeterminate"
               class="white-spinner"
             >
-              >
             </mat-progress-spinner>
           </ng-container>
         </button>
       </div>
 
+      <!-- Enlace: ¡Regístrate Aquí! -->
       <div class="register-link">
         <a (click)="signUp()">¡Regístrate Aquí!</a>
       </div>

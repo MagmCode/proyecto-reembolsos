@@ -52,37 +52,44 @@ export class SignInComponent implements OnInit {
   // login.component.ts
 // Método para manejar el envío del formulario de inicio de sesión
 onSubmit() {
-  if (this.loginForm.valid) {
-    this.isLoading = true;
+  // Marca todos los campos como "touched" para forzar la validación
+  this.loginForm.markAllAsTouched();
 
-    const { username, password } = this.loginForm.value;
-
-    this.authService.login(username, password).subscribe(
-      (response: any) => {
-        this.isLoading = false;
-        const token = response.access;
-        const rol = response.rol;  // Obtener el rol del usuario
-
-        // Guardar el token y el rol en la sesión
-        this.authService.setSession(token, rol === 'admin');
-
-        // Redirigir según el rol del usuario
-        if (rol === 'admin') {
-          this.router.navigate(['/admin/dashboard']);
-        } else if (rol === 'analista') {
-          this.router.navigate(['/analist/home-page']);
-        } else if (rol === 'cliente') {
-          this.router.navigate(['/user/home-page']);
-        } else {
-          this.router.navigate(['/Login']); // Redirigir a login si el rol no es válido
-        }
-      },
-      (error) => {
-        this.isLoading = false;
-        this.showSnackBar(error);
-      }
-    );
+  // Si el formulario no es válido, no continúes
+  if (this.loginForm.invalid) {
+    return;
   }
+
+  // Si el formulario es válido, procede con el inicio de sesión
+  this.isLoading = true;
+
+  const { username, password } = this.loginForm.value;
+
+  this.authService.login(username, password).subscribe(
+    (response: any) => {
+      this.isLoading = false;
+      const token = response.access;
+      const rol = response.rol;  // Obtener el rol del usuario
+
+      // Guardar el token y el rol en la sesión
+      this.authService.setSession(token, rol === 'admin');
+
+      // Redirigir según el rol del usuario
+      if (rol === 'admin') {
+        this.router.navigate(['/admin/dashboard']);
+      } else if (rol === 'analista') {
+        this.router.navigate(['/analist/home-page']);
+      } else if (rol === 'cliente') {
+        this.router.navigate(['/user/home-page']);
+      } else {
+        this.router.navigate(['/Login']); // Redirigir a login si el rol no es válido
+      }
+    },
+    (error) => {
+      this.isLoading = false;
+      this.showSnackBar(error);
+    }
+  );
 }
 
 
@@ -115,10 +122,17 @@ disableCopyPaste(event: Event): void {
     this.hide = !this.hide;
   }
 
-  getErrorMessage() {
-    if (this.loginForm.get('username')?.hasError('noExponentNotation')) {
+  getErrorMessage(controlName: string): string {
+    const control = this.loginForm.get(controlName);
+  
+    if (control?.hasError('required')) {
+      return 'Este campo es requerido.';
+    }
+  
+    if (controlName === 'username' && control?.hasError('noExponentNotation')) {
       return 'No se permite la notación científica (e).';
     }
+  
     return 'Campo inválido';
   }
 

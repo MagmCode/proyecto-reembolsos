@@ -1,7 +1,9 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit, QueryList, ViewChildren } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: "app-forgot-password",
@@ -13,13 +15,15 @@ export class ForgotPasswordComponent implements OnInit {
   passwordForm!: FormGroup;
   hide = true;
   hide2 = true;
+  isLoading = false;
 
   @ViewChildren('inputField') inputFields!: QueryList<any>;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private http: HttpClient
   ) {}
 
   openSnackBar(message: string, action: string) {
@@ -38,11 +42,62 @@ export class ForgotPasswordComponent implements OnInit {
     });
   }
 
-  onSubmit(stepper: any) {
+  onSubmit(stepper: MatStepper) {
+    const cedulaControl = this.recoveryForm.get("cedula");
     const emailControl = this.recoveryForm.get("email");
+
     if (this.recoveryForm.valid && this.validateEmail(emailControl?.value)) {
-      console.log(this.recoveryForm.value);
-      stepper.next();
+      const requestData = {
+        cedula: cedulaControl?.value,
+        email: emailControl?.value
+      };
+
+      // console.log('Datos enviados al backend:', requestData); // Log para depuración
+
+      // Configura los encabezados de la solicitud
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json'
+        })
+      };
+
+      this.http.post('http://localhost:8000/api/validate-cedula-email/', requestData, httpOptions)
+        .subscribe(
+          (response: any) => {
+            if (response.valid) {
+              stepper.next(); // Avanzar al siguiente paso
+            } else {
+              if (response.error === 'Usuario no registrado') {
+                cedulaControl?.setErrors({ notRegistered: true });
+              } else if (response.error === 'Correo incorrecto') {
+                emailControl?.setErrors({ emailMismatch: true });
+              } else {
+                this._snackBar.open("Error en la validación", "Cerrar", {
+                  duration: 3000,
+                });
+              }
+            }
+          },
+          (error) => {
+            console.error('Error en la solicitud:', error); // Log del error
+            if (error.status === 400) {
+              // Manejar errores específicos del backend
+              if (error.error.error === 'Usuario no registrado') {
+                cedulaControl?.setErrors({ notRegistered: true });
+              } else if (error.error.error === 'Correo incorrecto') {
+                emailControl?.setErrors({ emailMismatch: true });
+              } else {
+                this._snackBar.open("Error en la validación", "Cerrar", {
+                  duration: 3000,
+                });
+              }
+            } else {
+              this._snackBar.open("Error en el servidor", "Cerrar", {
+                duration: 3000,
+              });
+            }
+          }
+        );
     } else {
       if (emailControl) {
         emailControl.markAsTouched();
@@ -65,29 +120,45 @@ export class ForgotPasswordComponent implements OnInit {
   onPasswordSubmit() {
     const newPassword = this.passwordForm.get("newPassword");
     const confirmPassword = this.passwordForm.get("confirmPassword");
-
-    if (
-      this.passwordForm.valid &&
-      newPassword?.value === confirmPassword?.value
-    ) {
-      console.log("Nueva contraseña:", newPassword?.value);
-      this._snackBar.open("Contraseña Actualizada", "cerrar", {
-        duration: 3000,
-      });
-      this.router.navigate(["/Login"]);
-    } else if (
-      this.passwordForm.valid &&
-      newPassword?.value != confirmPassword?.value
-    ) {
-      console.log(
-        "Contraseña no coincide: ",
-        newPassword?.value,
-        " ",
-        confirmPassword?.value
+  
+    // Verifica si las contraseñas coinciden
+    if (newPassword?.value !== confirmPassword?.value) {
+      newPassword?.setErrors({ passwordMismatch: true });
+      confirmPassword?.setErrors({ passwordMismatch: true });
+      // this._snackBar.open("Las contraseñas no coinciden", "Cerrar", {
+      //   duration: 3000,
+      // });
+      return; // Detiene la ejecución si las contraseñas no coinciden
+    }
+  
+    // Si las contraseñas coinciden, procede con la actualización
+    if (this.passwordForm.valid) {
+      this.isLoading = true;
+      const cedulaControl = this.recoveryForm.get("cedula");
+      this.http.post('http://localhost:8000/api/update-password/', {
+        cedula: cedulaControl?.value,
+        newPassword: newPassword?.value
+      }).subscribe(
+        (response: any) => {
+          this.isLoading = false;
+          if (response.success) {
+            this._snackBar.open("Contraseña Actualizada", "cerrar", {
+              duration: 3000,
+            });
+            this.router.navigate(["/Login"]);
+          } else {
+            this._snackBar.open("Error al actualizar la contraseña", "Cerrar", {
+              duration: 3000,
+            });
+          }
+        },
+        (error) => {
+          console.error('Error en la solicitud:', error);
+          this._snackBar.open("Error en el servidor", "Cerrar", {
+            duration: 3000,
+          });
+        }
       );
-      this._snackBar.open("Las contraseñas deben ser iguales", "Cerrar", {
-        duration: 3000,
-      });
     } else {
       this.passwordForm.markAllAsTouched();
     }
@@ -114,6 +185,10 @@ export class ForgotPasswordComponent implements OnInit {
       return "Por favor rellene el campo";
     } else if (controlName === "email" && control?.hasError("email")) {
       return "Correo no válido";
+    } else if (controlName === "email" && control?.hasError("emailMismatch")) {
+      return "Correo incorrecto";
+    } else if (controlName === "cedula" && control?.hasError("notRegistered")) {
+      return "Usuario no registrado";
     } else if (
       controlName === "newPassword" &&
       control?.value !== this.passwordForm.get("confirmPassword")?.value

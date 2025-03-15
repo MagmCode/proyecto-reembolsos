@@ -88,6 +88,10 @@
     width: 300px;
     height: 45px;
     border-radius: 20px;
+
+    :hover {
+      cursor: pointer;
+    }
   }
 }
 

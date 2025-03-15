@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class AseguradoraService {
-  private apiUrl = 'http://localhost:8000/api/aseguradoras/'; // Cambia la URL según tu backend
+  private apiUrl = 'http://localhost:8000/api/aseguradoras/'; 
 
   constructor(private http: HttpClient) {}
 

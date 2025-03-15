@@ -129,9 +129,9 @@ export class SignUpComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('Estado del formulario:', this.signUpForm.status); // Debe ser "VALID"
-    console.log('Errores del formulario:', this.signUpForm.errors); // Debe ser null
-    console.log('Valores del formulario:', this.signUpForm.value);
+    // console.log('Estado del formulario:', this.signUpForm.status); // Debe ser "VALID"
+    // console.log('Errores del formulario:', this.signUpForm.errors); // Debe ser null
+    // console.log('Valores del formulario:', this.signUpForm.value);
   
     // Marca todos los campos como "touched" para forzar la validación
     this.signUpForm.markAllAsTouched();
@@ -248,7 +248,7 @@ export class SignUpComponent implements OnInit {
       this.authService.register(userData).subscribe(
         (response) => {
           this.isLoading = false;
-          console.log('Usuario registrado:', response);
+          // console.log('Usuario registrado:', response);
           this.signUpForm.reset();
   
           // Muestra un mensaje de éxito
@@ -274,7 +274,7 @@ export class SignUpComponent implements OnInit {
         }
       );
     } else {
-      console.log('Formulario inválido. Errores:', this.signUpForm.errors);
+      // console.log('Formulario inválido. Errores:', this.signUpForm.errors);
     }
   }
   

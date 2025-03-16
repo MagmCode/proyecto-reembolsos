@@ -3,8 +3,8 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http
 import { Router } from "@angular/router";
 import { catchError, tap } from "rxjs/operators";
 import { BehaviorSubject, Observable, throwError } from "rxjs";
-import { Reembolso } from 'src/app//models/reembolso.model';
-
+import { Reembolso } from 'src/app/models/reembolso.model';
+import { CartaAval } from "src/app/models/carta-aval.model";
 
 @Injectable({
   providedIn: "root",
@@ -13,9 +13,8 @@ export class AuthService {
   private inactivityTimer: any;
   private readonly inactivityDuration = 5 * 60 * 1000; // 5 minutes
   private tokenKey = 'access_token';
-  private roleKey = 'user_role';
-  private currentUserSubject!: BehaviorSubject<any>;
-  public currentUser!: Observable<any>;
+  private currentUserSubject: BehaviorSubject<any>;
+  public currentUser: Observable<any>;
 
   // URL de conexión
   // private apiUrl = "http://180.183.66.248:8000/api/"; // URL de tu API en Django local
@@ -27,35 +26,29 @@ export class AuthService {
     private router: Router,
     private _ngZone: NgZone
   ) {
-    this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('currentUser') || '{}'));
+    // Si no existe user, se inicia con un objeto vacío.
+    const storedUser = localStorage.getItem('currentUser') || '{}';
+    this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(storedUser));
     this.currentUser = this.currentUserSubject.asObservable();
     this.resetInactivityTimer();
     this.setupActivityListeners();
-
-   
   }
+
   login(username: string, password: string) {
     return this.http.post(`${this.apiUrl}login/`, { username, password }).pipe(
       catchError(this.handleError),
       tap((response: any) => {
-        // Almacenar el token y los datos del usuario
+        // Guarda solo el token en localStorage
         localStorage.setItem("access_token", response.access);
-        localStorage.setItem("is_admin", response.is_admin);
-        localStorage.setItem("username", response.username);
-        localStorage.setItem("first_name", response.first_name);
-        localStorage.setItem("last_name", response.last_name);
-        localStorage.setItem("tipoCedula", response.tipo_cedula); // Almacenar el tipo de cédula
-        localStorage.setItem("telefono", response.telefono); // Almacenar el teléfono
-        localStorage.setItem("aseguradora", response.aseguradora); // Almacenar la aseguradora
-        localStorage.setItem("nroPoliza", response.nroPoliza); // Almacenar el número de póliza
   
-        this.currentUserSubject.next(response); // Actualizar el currentUser
+        // Actualiza currentUserSubject con la respuesta completa
+        this.currentUserSubject.next(response);
       })
     );
   }
   
   private generateSessionId(): string {
-    return 'session_' + Math.random().toString(36).substr(2, 9); // Genera un ID único
+    return 'session_' + Math.random().toString(36).substr(2, 9);
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -68,10 +61,15 @@ export class AuthService {
     return throwError(errorMessage);
   }
 
-  // Método para guardar el token y el rol del usuario al iniciar sesión
+  // Guarda el token y (opcionalmente) el rol
   setSession(token: string, isAdmin: boolean): void {
     localStorage.setItem(this.tokenKey, token);
     localStorage.setItem('is_admin', JSON.stringify(isAdmin));
+  
+    // Actualiza currentUserSubject
+    const currentUser = this.currentUserSubject.value || {};
+    currentUser.role = isAdmin ? 'admin' : 'client';  // Ajusta según tu lógica de roles
+    this.currentUserSubject.next(currentUser);
   }
 
   register(userData: any): Observable<any> {
@@ -81,23 +79,22 @@ export class AuthService {
   }
 
   logout() {
-    // Elimina todos los datos del usuario
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    localStorage.removeItem("is_admin");
-    localStorage.removeItem("username");
-    localStorage.removeItem("first_name");
-    localStorage.removeItem("last_name");
-    localStorage.removeItem("session_id"); // Limpiar el identificador de sesión
+    // Limpia localStorage
+    localStorage.clear();
   
-    this.currentUserSubject.next(null); // Actualizar el currentUser
+    // Actualiza currentUserSubject
+    this.currentUserSubject.next(null);
   
-    // Realiza una solicitud al backend para destruir la sesión en el servidor
-    this.http.post<any>(`${this.apiUrl}logout/`, {}).subscribe(() => {
-      this.router.navigate(["/Login"]);
-    }, (error) => {
-      console.error('Error during logout:', error);
-    });
+    // Realiza la solicitud de logout
+    this.http.post<any>(`${this.apiUrl}logout/`, {}).subscribe(
+      () => {
+        this.router.navigate(["/Login"]);
+      },
+      (error) => {
+        console.error('Error during logout:', error);
+        this.router.navigate(["/Login"]);  // Redirige incluso si hay un error
+      }
+    );
   }
 
   verifyToken() {
@@ -105,12 +102,11 @@ export class AuthService {
     if (!token) {
       return false;
     }
-
     return this.http.get(`${this.apiUrl}verify-token/`, {
       headers: { Authorization: `Bearer ${token}` },
     }).pipe(
       catchError(() => {
-        this.logout(); // Si el token no es válido, cierra la sesión
+        this.logout();
         return throwError("Token inválido");
       })
     );
@@ -121,89 +117,104 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    return localStorage.getItem("is_admin") === "true"; // Convertir a booleano
+    return this.getUserRole() === 'admin';
+  }
+  
+  isAnalist(): boolean {
+    return this.getUserRole() === 'analist';
+  }
+
+  // Actualizado para usar el BehaviorSubject (currentUserSubject)
+  getUserRole(): string {
+    const currentUser = this.currentUserSubject.value;
+    if (currentUser && currentUser.role) {
+      return currentUser.role;
+    }
+    return 'client';  // Rol por defecto
+  }
+
+  getFirstName(): string {
+    const currentUser = this.currentUserSubject.value;
+    if (currentUser && currentUser.first_name) {
+      return currentUser.first_name;
+    }
+    return '';
+  }
+
+  // Retorna el usuario completo (sincrónicamente)
+  getUser(): any {
+    return this.currentUserSubject.value;
   }
 
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
   }
 
-  // Método para verificar si el usuario está autenticado
   isAuthenticated(): boolean {
     return !!this.getToken();
   }
 
   getUsername(): string {
-    return localStorage.getItem("username") || "Usuario"; // Valor por defecto
+    return localStorage.getItem("username") || "Usuario";
   }
 
   getFullName(): string {
     const firstName = localStorage.getItem('first_name') || '';
     const lastName = localStorage.getItem('last_name') || '';
-    return `${firstName} ${lastName}`.trim(); // Devuelve el nombre completo
+    return `${firstName} ${lastName}`.trim();
   }
 
   getName(): string {
-    const firstName = localStorage.getItem('first_name') || '';
-    return `${firstName}`; // Devuelve el nombre completo
+    return localStorage.getItem('first_name') || '';
   }
 
+  // Métodos basados en localStorage para roles (opcional si se concentra en currentUserSubject)
   getRol(): string {
     return localStorage.getItem("rol") || '';
   }
 
-  isAnalist(): boolean {
-    return this.getRol() === 'analista';
-  }
 
   isUser(): boolean {
     return this.getRol() === 'cliente';
   }
 
-   // Método para obtener el teléfono del usuario
-   getTelefono(): string {
+  getTelefono(): string {
     return localStorage.getItem("telefono") || "No disponible";
   }
 
-  // Método para obtener la aseguradora del usuario
   getAseguradora(): string {
     return localStorage.getItem("aseguradora") || "No disponible";
   }
 
-  // Método para obtener el número de póliza del usuario
   getNroPoliza(): string {
     return localStorage.getItem("nroPoliza") || "No disponible";
   }
 
-  // Método para obtener el tipo de cédula del usuario
   getTipoCedula(): string {
-    return localStorage.getItem("tipoCedula") || "V"; // Valor por defecto: 'V' (Venezolano)
+    return localStorage.getItem("tipoCedula") || "V";
   }
 
-  // Método para obtener los datos del perfil del usuario
-getUserProfile(): Observable<any> {
-  const token = this.getToken();
-  return this.http.get(`${this.apiUrl}user-profile/`, {
-    headers: { Authorization: `Bearer ${token}` },
-  }).pipe(
-    catchError(this.handleError)
-  );
-}
+  getUserProfile(): Observable<any> {
+    const token = this.getToken();
+    return this.http.get(`${this.apiUrl}user-profile/`, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).pipe(
+      catchError(this.handleError)
+    );
+  }
 
-updateUserData(updatedData: any): void {
-  this.currentUserSubject.next(updatedData); // Actualizar el BehaviorSubject
-}
+  updateUserData(updatedData: any): void {
+    this.currentUserSubject.next(updatedData);
+  }
 
-// Método para actualizar los datos del perfil del usuario
-updateUserProfile(userData: any): Observable<any> {
-  const token = this.getToken();
-  return this.http.put(`${this.apiUrl}user-profile/`, userData, {
-    headers: { Authorization: `Bearer ${token}` },
-  }).pipe(
-    catchError(this.handleError)
-  );
-}
-
+  updateUserProfile(userData: any): Observable<any> {
+    const token = this.getToken();
+    return this.http.put(`${this.apiUrl}user-profile/`, userData, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).pipe(
+      catchError(this.handleError)
+    );
+  }
 
   private resetInactivityTimer() {
     this._ngZone.runOutsideAngular(() => {
@@ -225,15 +236,7 @@ updateUserProfile(userData: any): Observable<any> {
     window.addEventListener("click", () => this.resetInactivityTimer());
   }
 
-
-
-
-
-
-
-
-
-  // Método para obtener los reembolsos del usuario actual
+  // Métodos para Reembolso
   getReembolsos(): Observable<Reembolso[]> {
     const token = this.getToken();
     return this.http.get<Reembolso[]>(`${this.apiUrl}reembolsos/`, {
@@ -241,18 +244,14 @@ updateUserProfile(userData: any): Observable<any> {
     });
   }
 
-  // Método para agregar un nuevo reembolso
   addReembolso(reembolso: FormData): Observable<Reembolso> {
-    const token = this.getToken(); // Obtén el token del localStorage
+    const token = this.getToken();
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}` // Incluye el token en el encabezado
+      'Authorization': `Bearer ${token}`
     });
-  
     return this.http.post<Reembolso>(`${this.apiUrl}reembolsos/`, reembolso, { headers });
   }
-  
 
-  // Método para subir archivos (comprobantes de factura)
   uploadFiles(files: FormData): Observable<any> {
     const token = this.getToken();
     return this.http.post(`${this.apiUrl}upload-files/`, files, {
@@ -260,6 +259,26 @@ updateUserProfile(userData: any): Observable<any> {
     });
   }
 
-
- 
+  // Métodos para Carta Aval
+  getCartaAval(): Observable<CartaAval[]> {
+    const token = this.getToken();
+    return this.http.get<CartaAval[]>(`${this.apiUrl}cartaaval/`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
   }
+
+  addCartaAval(cartaAval: FormData): Observable<CartaAval> {
+    const token = this.getToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.post<CartaAval>(`${this.apiUrl}cartaaval/`, cartaAval, { headers });
+  }
+
+  uploadFilesCartaAval(files: FormData): Observable<any> {
+    const token = this.getToken();
+    return this.http.post(`${this.apiUrl}upload-files/`, files, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
+}

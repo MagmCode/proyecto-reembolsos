@@ -57,7 +57,7 @@ html {
       
         .request-options {
           display: flex;
-          flex-wrap: wrap;  // Añadido para permitir múltiples filas
+          // flex-wrap: wrap;  // Añadido para permitir múltiples filas
           justify-content: center;
           gap: 5.5rem;
           margin-top: 1.5rem;
@@ -66,9 +66,9 @@ html {
             display: flex;
                 flex-direction: column;
                 align-items: center;
-                padding: 1rem;
+                padding: 3rem;
                 text-align: center;
-                width: 28%;
+                width: 100%;
                 box-sizing: border-box;
                 height: 178px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);

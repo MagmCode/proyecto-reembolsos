@@ -109,59 +109,35 @@ export class ReembolsoComponent implements OnInit {
       this.mostrarNotificacion('Por favor, complete todos los campos requeridos.');
       return;
     }
-  
-    // Validación: Asegurar que se hayan subido los tres documentos
-    if (
-      !this.selectedFiles['informe_ampliado'] ||
-      !this.selectedFiles['informe_resultado'] ||
-      !this.selectedFiles['docIdentificacion']
-    ) {
-      if (!this.selectedFiles['informe_ampliado']) {
-        this.secondFormGroup.get('informeAmplio')?.markAsTouched();
-      }
-      if (!this.selectedFiles['informe_resultado']) {
-        this.secondFormGroup.get('informeEstudio')?.markAsTouched();
-      }
-      if (!this.selectedFiles['docIdentificacion']) {
-        this.secondFormGroup.get('docIdentificacion')?.markAsTouched();
-      }
-      this.mostrarNotificacion('Debe cargar los tres documentos requeridos.');
-      return;
-    }
-  
+
     const facturaData = this.firstFormGroup.value;
     const formData = new FormData();
-  
-    // Convertir "fechaFactura" al formato esperado y asignarla al campo "fecha_factura"
+
+    // Convertir "fechaFactura" del formulario a "fecha_factura" en formato YYYY-MM-DD
     if (facturaData.fechaFactura) {
       facturaData.fecha_factura = this.formatDate(new Date(facturaData.fechaFactura));
-      delete facturaData.fechaFactura; // Para evitar duplicados
+      delete facturaData.fechaFactura; // Eliminamos la propiedad original para evitar duplicados
     }
-  
-    // Agregar los demás campos del formulario al FormData
+
+    // No eliminamos "nroControl" para que se envíe al backend
     Object.keys(facturaData).forEach(key => {
       formData.append(key, facturaData[key]);
     });
-  
-    // Agregar de forma explícita los archivos, mapeando la clave "docIdentificacion" a "cedula_paciente"
-    if (this.selectedFiles['informe_ampliado']) {
-      formData.append('informe_ampliado', this.selectedFiles['informe_ampliado']);
-    }
-    if (this.selectedFiles['informe_resultado']) {
-      formData.append('informe_resultado', this.selectedFiles['informe_resultado']);
-    }
-    if (this.selectedFiles['docIdentificacion']) {
-      formData.append('cedula_paciente', this.selectedFiles['docIdentificacion']);
-    }
-  
+
+    // Agregar los archivos seleccionados (asegúrate de que los nombres de campo coincidan con los que espera el backend)
+    Object.keys(this.selectedFiles).forEach(key => {
+      formData.append(key, this.selectedFiles[key]);
+    });
+
     // Campos adicionales requeridos por el backend
     formData.append('username', this.usuario.cedula);
     formData.append('aseguradora', this.usuario.aseguradora.toString());
     formData.append('estado', 'En revisión');
-  
-    // Enviar la solicitud al backend
+
     this.authService.addReembolso(formData).subscribe(
       (data: any) => {
+        // Mapeo de la respuesta del backend
+        // Si el backend no retorna "nroControl" o "estado", usamos los valores enviados o valores por defecto.
         const nuevoReembolso: Reembolso = {
           id: data.id,
           nroControl: data.nroControl || facturaData.nroControl,
@@ -172,7 +148,8 @@ export class ReembolsoComponent implements OnInit {
           username: data.username,
           documentos: this.construirDocumentos(data)
         };
-  
+
+        // Actualizamos la tabla agregando el nuevo reembolso
         this.facturaDataSource.data = [...this.facturaDataSource.data, nuevoReembolso];
         this.dialog.closeAll();
         this.firstFormGroup.reset();
@@ -186,7 +163,6 @@ export class ReembolsoComponent implements OnInit {
       }
     );
   }
-  
 
   // Función para construir el arreglo de Documentos usando los campos de archivos retornados por el backend
   private construirDocumentos(data: any): Documento[] {

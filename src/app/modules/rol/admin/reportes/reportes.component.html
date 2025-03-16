@@ -7,14 +7,14 @@
           <div class="request-options">
             <mat-card class="option">
                 <p class="option-text">Reembolso</p>
-                <p class="option-button option-semanal">Semanal</p>
-                <p class="option-button option-mensual">Mensual</p>
+                <p class="option-button option-semanal" (click)="descargarReporteSemanalReembolso()">Semanal</p>
+                <p class="option-button option-mensual" (click)="descargarReporteMensualReembolso()">Mensual</p>
               </mat-card>
               
               <mat-card class="option">
                 <p class="option-text">Carta Aval</p>
-                <p class="option-button option-semanal">Semanal</p>
-                <p class="option-button option-mensual">Mensual</p>
+                <p class="option-button option-semanal" (click)="descargarReporteSemanalCartaval()">Semanal</p>
+                <p class="option-button option-mensual" (click)="descargarReporteMensualCartaval()">Mensual</p>
               </mat-card>
               
           </div>

@@ -24,4 +24,11 @@ export class HomepageAnalistComponent implements OnInit {
   reportes() {
     this.router.navigate(["admin/reportes"]);
   }
+
+  reembolsoAnalist(): void {
+    this.router.navigate(['analist/reembolso']);
+  }
+  cartaAvalAnalist(): void {
+    this.router.navigate(['analist/carta-aval']);
+  }
 }

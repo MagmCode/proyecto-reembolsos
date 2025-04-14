@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/core/auth/auth.service';
 export class HeaderComponent implements OnInit {
   isAdmin: boolean = false;
   isAnalist: boolean = false;
-  first_name: string = '';
+  name: string = '';
   sidenavOpen: boolean = false;
   menuOpen: boolean = false;
 
@@ -23,7 +23,7 @@ export class HeaderComponent implements OnInit {
     const role = this.authService.getUserRole();
     this.isAdmin = role === 'admin';
     this.isAnalist = role === 'analista';
-    this.first_name = this.authService.getFirstName();
+    this.name = this.authService.getName();
   }
 
   // Métodos de navegación para usuarios (cliente)

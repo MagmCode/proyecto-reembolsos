@@ -23,12 +23,11 @@
             <p class="dos"><strong>Teléfono:</strong> {{ usuario?.telefono }}</p>
           </div>
           <div class="info">
-            <p class="uno"><strong>Aseguradora:</strong> {{ getAseguradora(usuario?.aseguradora) }}</p>
+            <p class="uno"><strong>Aseguradora:</strong> {{ usuario?.aseguradora }}</p>
             <p class="dos"><strong>Nro. Póliza:</strong> {{ usuario?.nroPoliza }}</p>
           </div>
           <div class="info">
             <p class="uno estatus"><strong>Monto Total:</strong> 00.00</p>
-            <!-- Puedes agregar más información aquí si es necesario -->
           </div>
           <div class="finiquito-button">
             <p><strong>Descargar Finiquito</strong></p>
@@ -136,21 +135,6 @@
 </mat-card>
 
 
-      <!-- Right Card (Diagnóstico y fecha de siniestro) -->
-      <mat-card class="right-card">
-        <mat-card-content>
-          <label>Diagnóstico</label>
-          <mat-form-field appearance="outline" class="full-width">
-            <textarea matInput rows="1" class="diagnostico-textarea"></textarea>
-          </mat-form-field>
-          <label>Fecha Siniestro</label>
-          <mat-form-field appearance="outline" class="full-width">
-            <input matInput [matDatepicker]="picker">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-        </mat-card-content>
-      </mat-card>
     </div>
   </div>
   <app-footer></app-footer>
@@ -193,8 +177,6 @@
               <input matInput formControlName="monto" required>
             </mat-form-field>
           </div>
-          <!-- Campo oculto para aseguradora -->
-          <input type="hidden" formControlName="aseguradora">
         </form>
         <div class="stepper-buttons">
           <button mat-button mat-dialog-close>Cancelar</button>
@@ -233,12 +215,12 @@
           <!-- Campo para documento de identificación -->
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Documento de Identificación</mat-label>
-            <input matInput [value]="getFileName('docIdentificacion')" readonly>
+            <input matInput [value]="getFileName('cedula_paciente')" readonly>
             <button mat-icon-button matSuffix (click)="fileInputCedulaPaciente.click()">
               <mat-icon>upload</mat-icon>
             </button>
-            <input hidden #fileInputCedulaPaciente type="file" (change)="onFileSelected($event, 'docIdentificacion')">
-            <mat-error *ngIf="secondFormGroup.get('docIdentificacion')?.touched">
+            <input hidden #fileInputCedulaPaciente type="file" (change)="onFileSelected($event, 'cedula_paciente')">
+            <mat-error *ngIf="secondFormGroup.get('cedula_paciente')?.touched">
               Debe cargar el documento de identificación.
             </mat-error>
           </mat-form-field>

@@ -11,7 +11,7 @@ import { CartaAval } from "src/app/models/carta-aval.model";
 })
 export class AuthService {
   private inactivityTimer: any;
-  private readonly inactivityDuration = 5 * 60 * 1000; // 5 minutes
+  private readonly inactivityDuration = 30 * 60 * 1000; // 5 minutes
   private tokenKey = 'access_token';
   private currentUserSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
@@ -34,18 +34,48 @@ export class AuthService {
     this.setupActivityListeners();
   }
 
-  login(username: string, password: string) {
-    return this.http.post(`${this.apiUrl}login/`, { username, password }).pipe(
-      catchError(this.handleError),
-      tap((response: any) => {
-        // Guarda solo el token en localStorage
-        localStorage.setItem("access_token", response.access);
-  
-        // Actualiza currentUserSubject con la respuesta completa
-        this.currentUserSubject.next(response);
-      })
-    );
-  }
+// En tu AuthService (método login)
+// En auth.service.ts
+
+login(username: string, password: string) {
+  return this.http.post(`${this.apiUrl}login/`, { username, password }).pipe(
+    tap((response: any) => {
+      console.log('Respuesta del login:', response); // Debug
+      
+      localStorage.setItem("access_token", response.access);
+      localStorage.setItem("username", response.username);
+      localStorage.setItem("first_name", response.first_name);
+      localStorage.setItem("last_name", response.last_name);
+      localStorage.setItem("tipo_cedula", response.tipo_cedula);
+      localStorage.setItem("telefono", response.telefono);
+      localStorage.setItem("aseguradora", response.aseguradora);
+      localStorage.setItem("nroPoliza", response.nroPoliza);
+      
+      console.log('Datos guardados en localStorage:', { // Debug
+        username: localStorage.getItem('username'),
+        first_name: localStorage.getItem('first_name'),
+        last_name: localStorage.getItem('last_name'),
+        tipo_cedula: localStorage.getItem('tipo_cedula'),
+        telefono: localStorage.getItem('telefono'),
+        aseguradora: localStorage.getItem('aseguradora'),
+        nroPoliza: localStorage.getItem('nroPoliza')
+      });
+      
+      // Actualiza el BehaviorSubject
+      this.currentUserSubject.next({
+        nombreCompleto: `${response.first_name} ${response.last_name}`,
+        tipoCedula: response.tipo_cedula,
+        cedula: response.username,
+        telefono: response.telefono,
+        aseguradora: response.aseguradora,
+        nroPoliza: response.nroPoliza
+      });
+    }),
+    catchError(this.handleError)
+  );
+}
+
+
   
   private generateSessionId(): string {
     return 'session_' + Math.random().toString(36).substr(2, 9);
@@ -155,7 +185,7 @@ export class AuthService {
   }
 
   getUsername(): string {
-    return localStorage.getItem("username") || "Usuario";
+    return localStorage.getItem('username') || '';
   }
 
   getFullName(): string {
@@ -179,19 +209,19 @@ export class AuthService {
   }
 
   getTelefono(): string {
-    return localStorage.getItem("telefono") || "No disponible";
+    return localStorage.getItem('telefono') || '';
   }
 
   getAseguradora(): string {
-    return localStorage.getItem("aseguradora") || "No disponible";
+    return localStorage.getItem('aseguradora') || '';
   }
 
   getNroPoliza(): string {
-    return localStorage.getItem("nroPoliza") || "No disponible";
+    return localStorage.getItem('nroPoliza') || '';
   }
 
   getTipoCedula(): string {
-    return localStorage.getItem("tipoCedula") || "V";
+    return localStorage.getItem('tipo_cedula') || 'V';
   }
 
   getUserProfile(): Observable<any> {

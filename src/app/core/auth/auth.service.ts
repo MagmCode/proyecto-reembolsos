@@ -50,6 +50,7 @@ login(username: string, password: string) {
       localStorage.setItem("telefono", response.telefono);
       localStorage.setItem("aseguradora", response.aseguradora);
       localStorage.setItem("nroPoliza", response.nroPoliza);
+      localStorage.setItem("rol", response.rol); // Store the role in localStorage
       
       console.log('Datos guardados en localStorage:', { // Debug
         username: localStorage.getItem('username'),
@@ -58,17 +59,19 @@ login(username: string, password: string) {
         tipo_cedula: localStorage.getItem('tipo_cedula'),
         telefono: localStorage.getItem('telefono'),
         aseguradora: localStorage.getItem('aseguradora'),
-        nroPoliza: localStorage.getItem('nroPoliza')
+        nroPoliza: localStorage.getItem('nroPoliza'),
+        rol: localStorage.getItem('rol')
       });
       
-      // Actualiza el BehaviorSubject
+      // Update the BehaviorSubject
       this.currentUserSubject.next({
         nombreCompleto: `${response.first_name} ${response.last_name}`,
         tipoCedula: response.tipo_cedula,
         cedula: response.username,
         telefono: response.telefono,
         aseguradora: response.aseguradora,
-        nroPoliza: response.nroPoliza
+        nroPoliza: response.nroPoliza,
+        role: response.rol // Update the role in the BehaviorSubject
       });
     }),
     catchError(this.handleError)
@@ -95,10 +98,13 @@ login(username: string, password: string) {
   setSession(token: string, isAdmin: boolean): void {
     localStorage.setItem(this.tokenKey, token);
     localStorage.setItem('is_admin', JSON.stringify(isAdmin));
-  
-    // Actualiza currentUserSubject
+
+    // Retrieve the role from localStorage
+    const storedRole = localStorage.getItem('rol');
+
+    // Update currentUserSubject with the correct role
     const currentUser = this.currentUserSubject.value || {};
-    currentUser.role = isAdmin ? 'admin' : 'client';  // Ajusta según tu lógica de roles
+    currentUser.role = storedRole || (isAdmin ? 'admin' : 'client'); // Use stored role if available
     this.currentUserSubject.next(currentUser);
   }
 
@@ -157,10 +163,21 @@ login(username: string, password: string) {
   // Actualizado para usar el BehaviorSubject (currentUserSubject)
   getUserRole(): string {
     const currentUser = this.currentUserSubject.value;
+    console.log('Debug: Current user from BehaviorSubject:', currentUser); // Debug
     if (currentUser && currentUser.role) {
+      console.log('Debug: Role retrieved from BehaviorSubject:', currentUser.role); // Debug
       return currentUser.role;
     }
-    return 'client';  // Rol por defecto
+
+    // If not in BehaviorSubject, try localStorage
+    const storedRole = localStorage.getItem('rol');
+    console.log('Debug: Role retrieved from localStorage:', storedRole); // Debug
+    if (storedRole) {
+      return storedRole;
+    }
+
+    console.warn('Debug: Defaulting to client role'); // Debug
+    return 'client';
   }
 
   getFirstName(): string {

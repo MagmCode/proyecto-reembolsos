@@ -51,7 +51,7 @@ export class HeaderComponent implements OnInit {
     if (this.sidenavOpen) {
       this.sidenavOpen = false;
     }
-    this.router.navigate(['analist/dashboard']);
+    this.router.navigate(['analist/home-page']);
   }
   historialAnalist(): void {
     this.router.navigate(['analist/historial']);

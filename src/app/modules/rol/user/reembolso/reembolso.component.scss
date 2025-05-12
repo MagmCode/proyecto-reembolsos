@@ -85,8 +85,7 @@
 
 .mat-table {
   width: 100%;
-  table-layout: fixed;
-  min-width: 1000px; /* Ajusta este valor según sea necesario */
+  table-layout: auto;
 }
 
 .mat-header-cell,
@@ -273,19 +272,29 @@ mat-paginator {
   font-weight: bold;
 }
 
-.estado-aprobado {
-  background-color: #4caf50;
+.totales {
+  background-color: white;
+}
+
+.estado.aprobado {
+  background-color: #50b753c4;
   color: white;
 }
 
-.estado-rechazado {
-  background-color: #f44336;
+.estado.rechazado {
+  background-color: #b6443cdf;
   color: white;
 }
 
-.estado-revision {
-  background-color: #ff9800;
+.estado.revision {
+  background-color: #e5a84de2;
   color: white;
+}
+
+.estado {
+  border-radius: 30px;
+  width: 110px;
+  text-align: center;
 }
 
 @media (max-width: 600px) {

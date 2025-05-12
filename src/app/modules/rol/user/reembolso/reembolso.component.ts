@@ -16,14 +16,14 @@ import { AseguradoraService } from 'src/app/services/aseguradora.service';
 export class ReembolsoComponent implements OnInit {
   facturaDataSource = new MatTableDataSource<Reembolso>();
   displayedColumns: string[] = [
+    'acciones',
     'id',
     'nroControl',
     'fechaFactura',
     'concepto',
     'monto',
     'documentos',
-    'estado',
-    'acciones'
+    'estado'
   ];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -258,6 +258,8 @@ export class ReembolsoComponent implements OnInit {
   // Getters para estadísticas
   get totalSolicitudes(): number { return this.facturaDataSource.data.length; }
   get aprobadas(): number { return this.facturaDataSource.data.filter(s => s.estado === 'APROBADO').length; }
-  get enRevision(): number { return this.facturaDataSource.data.filter(s => s.estado === 'PENDIENTE').length; }
+  get enRevision(): number {
+    return this.facturaDataSource.data.filter(s => s.estado?.toUpperCase() !== 'APROBADO' && s.estado?.toUpperCase() !== 'RECHAZADO').length;
+  }
   get rechazadas(): number { return this.facturaDataSource.data.filter(s => s.estado === 'RECHAZADO').length; }
 }

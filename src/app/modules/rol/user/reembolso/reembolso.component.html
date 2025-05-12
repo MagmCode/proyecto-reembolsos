@@ -5,10 +5,10 @@
 
     <!-- Resumen de solicitudes -->
     <div class="resumen-solicitudes">
-      <mat-chip>Total: {{ totalSolicitudes }}</mat-chip>
-      <mat-chip class="estado-aprobado">Aprobadas: {{ aprobadas }}</mat-chip>
-      <mat-chip class="estado-revision">En revisión: {{ enRevision }}</mat-chip>
-      <mat-chip class="estado-rechazado">Rechazadas: {{ rechazadas }}</mat-chip>
+      <mat-chip class="totales">Total: {{ totalSolicitudes }}</mat-chip>
+      <mat-chip class="estado aprobado">Aprobadas: {{ aprobadas }}</mat-chip>
+      <mat-chip class="estado revision">En revisión: {{ enRevision }}</mat-chip>
+      <mat-chip class="estado rechazado">Rechazadas: {{ rechazadas }}</mat-chip>
     </div>
 
     <!-- Contenido principal -->
@@ -49,6 +49,8 @@
     </mat-form-field>
   </div>
 
+
+
   <mat-paginator class="paginator" [pageSize]="3" [pageSizeOptions]="[3]" showFirstLastButtons></mat-paginator>
 
 
@@ -56,6 +58,20 @@
     <div class="table-container">
       <table mat-table [dataSource]="facturaDataSource" class="mat-elevation-z8">
 
+                <!-- Acciones Column -->
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef>
+            <button mat-icon-button (click)="addRow()">
+              <mat-icon>add</mat-icon>
+            </button>
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button (click)="verDetalles(element)">
+              <mat-icon color="primary">visibility</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        
         <!-- Nro. Factura Column -->
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef>Nro. Factura</th>
@@ -112,19 +128,8 @@
           </td>
         </ng-container>
 
-        <!-- Acciones Column -->
-        <ng-container matColumnDef="acciones">
-          <th mat-header-cell *matHeaderCellDef>
-            <button mat-icon-button (click)="addRow()">
-              <mat-icon>add</mat-icon>
-            </button>
-          </th>
-          <td mat-cell *matCellDef="let element">
-            <button mat-icon-button (click)="verDetalles(element)">
-              <mat-icon color="primary">visibility</mat-icon>
-            </button>
-          </td>
-        </ng-container>
+
+        
 
         <!-- Header and Rows -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
